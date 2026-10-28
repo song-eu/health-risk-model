@@ -1,0 +1,281 @@
+{
+ "disease": "brc33",
+ "kind": "cox",
+ "definition": "유방암(C50) 확진 최초일, 여성만. 암 과거력 제외, index 후 1년 안 발생 제외. 검진 자료 합쳐 학습",
+ "features": [
+  "age_at_index",
+  "sex",
+  "bmi",
+  "fpg",
+  "hx_dm",
+  "hx_nulliparous"
+ ],
+ "sigma": null,
+ "gpop_applied": true,
+ "gpop": {
+  "params": {
+   "0": {
+    "age_mid": [
+     25.0,
+     35.0,
+     45.0,
+     55.0,
+     65.0,
+     75.0
+    ],
+    "shift": [
+     -0.8087,
+     -0.3686,
+     -0.0299,
+     0.0261,
+     0.1765,
+     -0.5308
+    ]
+   },
+   "1": {
+    "age_mid": [
+     25.0,
+     35.0,
+     45.0,
+     55.0,
+     65.0,
+     75.0
+    ],
+    "shift": [
+     -0.8087,
+     -0.3686,
+     -0.0299,
+     0.0261,
+     0.1765,
+     -0.5308
+    ],
+    "placeholder": "여성만 질환 — 남성은 예측 대상 아님"
+   }
+  },
+  "mode": "band_relax(PAV 없음)",
+  "table": [
+   {
+    "sex": 0,
+    "age": "19-29",
+    "n": 2067,
+    "target": 0.00237,
+    "pred_pre": 0.00532,
+    "ratio_pre": 2.24,
+    "pred_post": 0.00256,
+    "ratio_post": 1.08,
+    "gate": "Pass"
+   },
+   {
+    "sex": 0,
+    "age": "30-39",
+    "n": 2256,
+    "target": 0.01264,
+    "pred_pre": 0.01821,
+    "ratio_pre": 1.44,
+    "pred_post": 0.01267,
+    "ratio_post": 1.0,
+    "gate": "Pass"
+   },
+   {
+    "sex": 0,
+    "age": "40-49",
+    "n": 3089,
+    "target": 0.0224,
+    "pred_pre": 0.02307,
+    "ratio_pre": 1.03,
+    "pred_post": 0.02146,
+    "ratio_post": 0.96,
+    "gate": "Pass"
+   },
+   {
+    "sex": 0,
+    "age": "50-59",
+    "n": 3467,
+    "target": 0.01856,
+    "pred_pre": 0.01809,
+    "ratio_pre": 0.97,
+    "pred_post": 0.01861,
+    "ratio_post": 1.0,
+    "gate": "Pass"
+   },
+   {
+    "sex": 0,
+    "age": "60-69",
+    "n": 3731,
+    "target": 0.01518,
+    "pred_pre": 0.01274,
+    "ratio_pre": 0.84,
+    "pred_post": 0.01404,
+    "ratio_post": 0.92,
+    "gate": "Pass"
+   },
+   {
+    "sex": 0,
+    "age": "70+",
+    "n": 3501,
+    "target": 0.00904,
+    "pred_pre": 0.01532,
+    "ratio_pre": 1.69,
+    "pred_post": 0.00967,
+    "ratio_post": 1.07,
+    "gate": "Pass"
+   }
+  ],
+  "gate_pass": true,
+  "lower_bound_sex": [],
+  "target_source": "국가암등록 2023 유방(C50) 여성 5세 조발생률 → 10년 누적(integral), T-pop 국건영 HN19–24 여성 암 과거력 없음",
+  "relaxed": {
+   "0": {}
+  }
+ },
+ "q_module": {
+  "features": [
+   "smoke_former",
+   "smoke_current",
+   "alc_cur"
+  ],
+  "beta": [
+   -0.0,
+   -0.04879016416943204,
+   -0.04879016416943204
+  ],
+  "mean": [
+   0.04244550914366691,
+   0.04190566165058371,
+   0.3281597948579526
+  ],
+  "note": "Cox 묶음: lp −= (q − 평균)·β, β = −ln RR(문헌 고정값). 빈칸 = 평균(이동 0)"
+ },
+ "impute": {},
+ "required": [
+  "age_at_index",
+  "sex",
+  "sbp",
+  "dbp",
+  "bmi",
+  "fpg",
+  "tchol",
+  "tg",
+  "hdl",
+  "hb",
+  "creatinine",
+  "ast",
+  "alt"
+ ],
+ "source_dir": "out_brc33p",
+ "horizons": [
+  1,
+  3,
+  5,
+  8,
+  10
+ ],
+ "cox": {
+  "terms": [
+   {
+    "name": "age",
+    "beta": -0.03364094014221105,
+    "mean": 50.45046494204751,
+    "source": "합침 Cox(나이 3차)"
+   },
+   {
+    "name": "age2",
+    "beta": -0.1539898109687159,
+    "mean": 1.524988101009212,
+    "source": "합침 Cox(나이 3차)"
+   },
+   {
+    "name": "age3",
+    "beta": 0.08536421205912634,
+    "mean": 0.1457354237362846,
+    "source": "합침 Cox(나이 3차)"
+   },
+   {
+    "name": "bmi25_post",
+    "beta": 0.09531017980432493,
+    "mean": 0.10975717244722577,
+    "rr": 1.1,
+    "source": "WCRF/AICR CUP 2018 폐경 후 BMI 5 단위당 RR 1.12. 50세 이상만(폐경 전은 반대 방향이라 넣지 않음)"
+   },
+   {
+    "name": "dm",
+    "beta": 0.09531017980432493,
+    "mean": 0.042549909655810673,
+    "rr": 1.1,
+    "source": "Boyle 2012 메타분석 2형 당뇨 여성 유방암 RR 약 1.2 — 보수적으로 1.10. 당뇨 = 당뇨 과거력 또는 공복혈당 126 이상"
+   },
+   {
+    "name": "hx_nulliparous",
+    "beta": 0.13976194237515863,
+    "mean": 0.2582852247035654,
+    "rr": 1.15,
+    "source": "Collaborative Group on Hormonal Factors 2002(Lancet) 출산 1회당 RR 7% 감소; 한중일 12개 코호트 합동(Nabila 2024, Breast Cancer Res) 젊은 출생 코호트 출산 HR 0.86(→ 무출산 약 1.16). 임상 자문 범위 1.1–1.2 의 가운데"
+   }
+  ],
+  "H0": {
+   "1": 0.0009817341424224575,
+   "3": 0.002945202427267372,
+   "5": 0.0065682773852093436,
+   "8": 0.01203655677132708,
+   "10": 0.016751874983406138
+  },
+  "fitted_on": "검진 자료 여성, 사건 490",
+  "literature_rr": {
+   "smoke_current": {
+    "rr": 1.05,
+    "source": "Macacu 2015 메타분석 현재 흡연 RR 약 1.1 — 보수적으로 1.05"
+   },
+   "smoke_former": {
+    "rr": 1.0,
+    "source": "과거 흡연은 근거가 약해 1.00(금연하면 위험이 오르지 않게)"
+   },
+   "alc_cur": {
+    "rr": 1.05,
+    "source": "WCRF/AICR CUP 2018 알코올 10 g/일당 폐경 전 1.05·폐경 후 1.09. 입력은 음주 여부뿐이라 1.05"
+   },
+   "bmi25_post": {
+    "rr": 1.1,
+    "source": "WCRF/AICR CUP 2018 폐경 후 BMI 5 단위당 RR 1.12. 50세 이상만(폐경 전은 반대 방향이라 넣지 않음)"
+   },
+   "dm": {
+    "rr": 1.1,
+    "source": "Boyle 2012 메타분석 2형 당뇨 여성 유방암 RR 약 1.2 — 보수적으로 1.10. 당뇨 = 당뇨 과거력 또는 공복혈당 126 이상"
+   },
+   "hx_nulliparous": {
+    "rr": 1.15,
+    "source": "Collaborative Group on Hormonal Factors 2002(Lancet) 출산 1회당 RR 7% 감소; 한중일 12개 코호트 합동(Nabila 2024, Breast Cancer Res) 젊은 출생 코호트 출산 HR 0.86(→ 무출산 약 1.16). 임상 자문 범위 1.1–1.2 의 가운데"
+   }
+  },
+  "cv": {
+   "n": 45382,
+   "5y": {
+    "events": 239,
+    "C": 0.58,
+    "OE": 1.0,
+    "slope": 0.804
+   },
+   "10y": {
+    "events": 411,
+    "C": 0.573,
+    "OE": 1.001,
+    "slope": 0.562
+   }
+  },
+  "nulliparous": {
+   "knhanes_weighted_prevalence": 0.2583,
+   "by_band": {
+    "19-29": 0.944,
+    "30-39": 0.412,
+    "40-49": 0.126,
+    "50-59": 0.057,
+    "60-69": 0.035,
+    "70+": 0.025
+   },
+   "blank": "1(임신/수유 경험 없음, 무출산 1.15배)으로 계산. 결과에 임신/수유 과거력 미입력 표시"
+  },
+  "decision": "나이 구간(비단조) Cox + 국가 목표 보정 + 문헌 상대위험 고정값, 자녀유무(무출산) 1.15 추가. 나이 방향 제약 없음"
+ },
+ "blank_fill": {
+  "hx_nulliparous": 1.0
+ }
+}

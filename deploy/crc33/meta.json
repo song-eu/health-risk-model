@@ -1,0 +1,310 @@
+{
+ "disease": "crc33",
+ "kind": "cox",
+ "definition": "대장암(C18–C20) 확진 최초일. 암 과거력 제외, index 후 1년 안 발생 제외. 내시경 검진 효과가 큰 자료는 외부 비교에만 사용",
+ "features": [
+  "age_at_index",
+  "sex",
+  "bmi",
+  "fpg",
+  "hx_dm"
+ ],
+ "sigma": null,
+ "gpop_applied": true,
+ "gpop": {
+  "params": {
+   "0": {
+    "age_mid": [
+     25.0,
+     35.0,
+     45.0,
+     55.0,
+     65.0,
+     75.0
+    ],
+    "shift": [
+     0.0195,
+     0.6254,
+     0.6254,
+     0.6254,
+     0.6254,
+     0.6254
+    ]
+   },
+   "1": {
+    "age_mid": [
+     25.0,
+     35.0,
+     45.0,
+     55.0,
+     65.0,
+     75.0
+    ],
+    "shift": [
+     0.021,
+     0.5789,
+     0.733,
+     0.7524,
+     0.7524,
+     0.7147
+    ]
+   }
+  },
+  "mode": "band_relax",
+  "table": [
+   {
+    "sex": 0,
+    "age": "19-29",
+    "n": 2067,
+    "target": 0.00107,
+    "pred_pre": 0.00105,
+    "ratio_pre": 0.98,
+    "pred_post": 0.00115,
+    "ratio_post": 1.07,
+    "gate": "Pass"
+   },
+   {
+    "sex": 0,
+    "age": "30-39",
+    "n": 2256,
+    "target": 0.00293,
+    "pred_pre": 0.0014,
+    "ratio_pre": 0.48,
+    "pred_post": 0.00244,
+    "ratio_post": 0.83,
+    "gate": "Pass"
+   },
+   {
+    "sex": 0,
+    "age": "40-49",
+    "n": 3089,
+    "target": 0.00481,
+    "pred_pre": 0.00203,
+    "ratio_pre": 0.42,
+    "pred_post": 0.00378,
+    "ratio_post": 0.79,
+    "gate": "Pass"
+   },
+   {
+    "sex": 0,
+    "age": "50-59",
+    "n": 3467,
+    "target": 0.00631,
+    "pred_pre": 0.00322,
+    "ratio_pre": 0.51,
+    "pred_post": 0.00602,
+    "ratio_post": 0.95,
+    "gate": "Pass"
+   },
+   {
+    "sex": 0,
+    "age": "60-69",
+    "n": 3731,
+    "target": 0.00947,
+    "pred_pre": 0.00561,
+    "ratio_pre": 0.59,
+    "pred_post": 0.01045,
+    "ratio_post": 1.1,
+    "gate": "Pass"
+   },
+   {
+    "sex": 0,
+    "age": "70+",
+    "n": 3501,
+    "target": 0.0186,
+    "pred_pre": 0.01251,
+    "ratio_pre": 0.67,
+    "pred_post": 0.02324,
+    "ratio_post": 1.25,
+    "gate": "Pass"
+   },
+   {
+    "sex": 1,
+    "age": "19-29",
+    "n": 1928,
+    "target": 0.0015,
+    "pred_pre": 0.00147,
+    "ratio_pre": 0.98,
+    "pred_post": 0.00159,
+    "ratio_post": 1.06,
+    "gate": "Pass"
+   },
+   {
+    "sex": 1,
+    "age": "30-39",
+    "n": 1870,
+    "target": 0.00357,
+    "pred_pre": 0.002,
+    "ratio_pre": 0.56,
+    "pred_post": 0.00341,
+    "ratio_post": 0.95,
+    "gate": "Pass"
+   },
+   {
+    "sex": 1,
+    "age": "40-49",
+    "n": 2416,
+    "target": 0.00618,
+    "pred_pre": 0.00297,
+    "ratio_pre": 0.48,
+    "pred_post": 0.00608,
+    "ratio_post": 0.98,
+    "gate": "Pass"
+   },
+   {
+    "sex": 1,
+    "age": "50-59",
+    "n": 2545,
+    "target": 0.01221,
+    "pred_pre": 0.00478,
+    "ratio_pre": 0.39,
+    "pred_post": 0.01009,
+    "ratio_post": 0.83,
+    "gate": "Pass"
+   },
+   {
+    "sex": 1,
+    "age": "60-69",
+    "n": 2851,
+    "target": 0.01879,
+    "pred_pre": 0.00824,
+    "ratio_pre": 0.44,
+    "pred_post": 0.01733,
+    "ratio_post": 0.92,
+    "gate": "Pass"
+   },
+   {
+    "sex": 1,
+    "age": "70+",
+    "n": 2704,
+    "target": 0.02817,
+    "pred_pre": 0.01732,
+    "ratio_pre": 0.61,
+    "pred_post": 0.03517,
+    "ratio_post": 1.25,
+    "gate": "Pass"
+   }
+  ],
+  "gate_pass": true,
+  "lower_bound_sex": [],
+  "target_source": "국가암등록 2023 대장(C18-C20) 성·5세 조발생률 → 10년 누적(integral), T-pop 국건영 HN19–24 암 과거력 없음",
+  "relaxed": {
+   "0": {},
+   "1": {
+    "70+": {
+     "pav": 0.7524,
+     "relaxed": 0.7147
+    }
+   }
+  }
+ },
+ "q_module": {
+  "features": [
+   "smoke_former",
+   "smoke_current",
+   "alc_cur"
+  ],
+  "beta": [
+   -0.09531017980432493,
+   -0.09531017980432493,
+   -0.04879016416943204
+  ],
+  "mean": [
+   0.24744746620039343,
+   0.18734193024635465,
+   0.5436975052299622
+  ],
+  "note": "Cox 묶음: lp −= (q − 평균)·β, β = −ln RR(문헌 고정값). 빈칸 = 평균(이동 0)"
+ },
+ "impute": {},
+ "required": [
+  "age_at_index",
+  "sex",
+  "sbp",
+  "dbp",
+  "bmi",
+  "fpg",
+  "tchol",
+  "tg",
+  "hdl",
+  "hb",
+  "creatinine",
+  "ast",
+  "alt"
+ ],
+ "source_dir": "out_crc33h",
+ "horizons": [
+  1,
+  3,
+  5,
+  8,
+  10
+ ],
+ "cox": {
+  "terms": [
+   {
+    "name": "age",
+    "beta": 0.04684909139150409,
+    "mean": 52.264870265713306,
+    "source": "자료 Cox"
+   },
+   {
+    "name": "age2",
+    "beta": 0.047666149884773065,
+    "mean": 1.5070287569862895,
+    "source": "자료 Cox"
+   },
+   {
+    "name": "male",
+    "beta": 0.2836428521651096,
+    "mean": 0.5121616136384926,
+    "source": "자료 Cox"
+   },
+   {
+    "name": "bmi25",
+    "beta": 0.0769610411361284,
+    "mean": 0.30827114622037655,
+    "rr": 1.08,
+    "source": "한국 국민건강보험 지속 비만 HR 1.08 (1.06–1.11); 아시아 코호트 컨소시엄 최대 1.32 — 하한 쪽"
+   },
+   {
+    "name": "dm",
+    "beta": 0.1823215567939546,
+    "mean": 0.08036968807568615,
+    "rr": 1.2,
+    "source": "Larsson 2005 메타분석 당뇨 RR 1.30 (1.20–1.40) — 하한. 당뇨 = 당뇨 과거력 또는 공복혈당 126 이상"
+   }
+  ],
+  "H0": {
+   "1": 0.00029109301069692037,
+   "3": 0.0008732790320907611,
+   "5": 0.001477981854874877,
+   "8": 0.002591032370165851,
+   "10": 0.0036094751464876267
+  },
+  "fitted_on": "검진 자료, 사건 133",
+  "literature_rr": {
+   "smoke_current": {
+    "rr": 1.1,
+    "source": "Botteri 2020 메타분석 현재 흡연 RR 1.14 (1.10–1.18) — 하한"
+   },
+   "smoke_former": {
+    "rr": 1.1,
+    "source": "Botteri 2020 과거 흡연 1.17 (1.15–1.20). 금연이 위험을 올리는 것처럼 보이지 않게 현재 흡연과 같은 값(보수)"
+   },
+   "alc_cur": {
+    "rr": 1.05,
+    "source": "Fedirko 2011 가벼운 음주 RR 1.00·중등도(2–3잔/일) 1.21. 입력은 음주 여부뿐이라 보수적으로 1.05"
+   },
+   "bmi25": {
+    "rr": 1.08,
+    "source": "한국 국민건강보험 지속 비만 HR 1.08 (1.06–1.11); 아시아 코호트 컨소시엄 최대 1.32 — 하한 쪽"
+   },
+   "dm": {
+    "rr": 1.2,
+    "source": "Larsson 2005 메타분석 당뇨 RR 1.30 (1.20–1.40) — 하한. 당뇨 = 당뇨 과거력 또는 공복혈당 126 이상"
+   }
+  },
+  "decision": "나이·성 Cox + 국가 목표 보정, 개인 인자 = 문헌 상대위험 보수적 고정값, 수준 = 국가 목표"
+ }
+}

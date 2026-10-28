@@ -1,0 +1,408 @@
+{
+ "disease": "lca33",
+ "definition": "간암(C22) 확진 최초일. 위암과 같은 암 규칙(암 과거력 제외, index 후 1년 안 발생 제외). 만성 간질환 과거력(hx_liver)을 따로 입력",
+ "features": [
+  "age_at_index",
+  "sex",
+  "sbp",
+  "dbp",
+  "bmi",
+  "waist",
+  "fpg",
+  "tchol",
+  "tg",
+  "hdl",
+  "ldl",
+  "hb",
+  "creatinine",
+  "ast",
+  "alt",
+  "ggt",
+  "urine_protein",
+  "hx_dm",
+  "hx_htn",
+  "hx_dyslipidemia",
+  "hx_cvd",
+  "hx_cerebrovascular",
+  "hx_tb",
+  "hx_liver",
+  "hx_others"
+ ],
+ "sigma": 1.67,
+ "monotone": {
+  "age_at_index": -1,
+  "hx_liver": -1,
+  "hx_others": -1,
+  "hx_dm": -1,
+  "hx_htn": -1,
+  "hx_dyslipidemia": -1,
+  "hx_cvd": -1,
+  "hx_cerebrovascular": -1,
+  "hx_tb": -1
+ },
+ "xgboost": "3.4.1",
+ "gpop_applied": true,
+ "gpop": {
+  "params": {
+   "0": {
+    "age_mid": [
+     25.0,
+     35.0,
+     45.0,
+     55.0,
+     65.0,
+     75.0
+    ],
+    "shift": [
+     -2.5369,
+     -1.2277,
+     -0.6269,
+     -0.2614,
+     -0.194,
+     0.1133
+    ]
+   },
+   "1": {
+    "age_mid": [
+     25.0,
+     35.0,
+     45.0,
+     55.0,
+     65.0,
+     75.0
+    ],
+    "shift": [
+     -2.6655,
+     -0.8621,
+     -0.2047,
+     0.3169,
+     0.3742,
+     0.4141
+    ]
+   }
+  },
+  "mode": "band_relax",
+  "target_source": "국가암등록 2023 간(C22) 성·5세 조발생률 → 10년 누적 1−exp(−Σ율), 연령 환산 integral (KOSIS DT_117N_A00023)",
+  "table": [
+   {
+    "sex": 0,
+    "age": "19-29",
+    "n": 2067,
+    "target": 0.0001,
+    "pred_pre": 0.0008,
+    "ratio_pre": 12.62,
+    "pred_post": 0.0001,
+    "ratio_post": 1.14,
+    "gate": "Pass"
+   },
+   {
+    "sex": 0,
+    "age": "30-39",
+    "n": 2256,
+    "target": 0.0003,
+    "pred_pre": 0.0009,
+    "ratio_pre": 3.4,
+    "pred_post": 0.0003,
+    "ratio_post": 0.91,
+    "gate": "Pass"
+   },
+   {
+    "sex": 0,
+    "age": "40-49",
+    "n": 3089,
+    "target": 0.0007,
+    "pred_pre": 0.0014,
+    "ratio_pre": 1.87,
+    "pred_post": 0.0007,
+    "ratio_post": 0.98,
+    "gate": "Pass"
+   },
+   {
+    "sex": 0,
+    "age": "50-59",
+    "n": 3467,
+    "target": 0.0017,
+    "pred_pre": 0.0022,
+    "ratio_pre": 1.3,
+    "pred_post": 0.0016,
+    "ratio_post": 0.97,
+    "gate": "Pass"
+   },
+   {
+    "sex": 0,
+    "age": "60-69",
+    "n": 3731,
+    "target": 0.0035,
+    "pred_pre": 0.0043,
+    "ratio_pre": 1.21,
+    "pred_post": 0.0036,
+    "ratio_post": 1.02,
+    "gate": "Pass"
+   },
+   {
+    "sex": 0,
+    "age": "70+",
+    "n": 3501,
+    "target": 0.0069,
+    "pred_pre": 0.0061,
+    "ratio_pre": 0.89,
+    "pred_post": 0.0067,
+    "ratio_post": 0.97,
+    "gate": "Pass"
+   },
+   {
+    "sex": 1,
+    "age": "19-29",
+    "n": 1928,
+    "target": 0.0001,
+    "pred_pre": 0.0016,
+    "ratio_pre": 14.34,
+    "pred_post": 0.0001,
+    "ratio_post": 1.24,
+    "gate": "Pass"
+   },
+   {
+    "sex": 1,
+    "age": "30-39",
+    "n": 1870,
+    "target": 0.0008,
+    "pred_pre": 0.0019,
+    "ratio_pre": 2.36,
+    "pred_post": 0.0007,
+    "ratio_post": 0.91,
+    "gate": "Pass"
+   },
+   {
+    "sex": 1,
+    "age": "40-49",
+    "n": 2416,
+    "target": 0.0031,
+    "pred_pre": 0.0038,
+    "ratio_pre": 1.22,
+    "pred_post": 0.0031,
+    "ratio_post": 0.99,
+    "gate": "Pass"
+   },
+   {
+    "sex": 1,
+    "age": "50-59",
+    "n": 2545,
+    "target": 0.0073,
+    "pred_pre": 0.0054,
+    "ratio_pre": 0.73,
+    "pred_post": 0.0069,
+    "ratio_post": 0.95,
+    "gate": "Pass"
+   },
+   {
+    "sex": 1,
+    "age": "60-69",
+    "n": 2851,
+    "target": 0.0122,
+    "pred_pre": 0.0085,
+    "ratio_pre": 0.7,
+    "pred_post": 0.0121,
+    "ratio_post": 1.0,
+    "gate": "Pass"
+   },
+   {
+    "sex": 1,
+    "age": "70+",
+    "n": 2704,
+    "target": 0.0185,
+    "pred_pre": 0.0124,
+    "ratio_pre": 0.67,
+    "pred_post": 0.0184,
+    "ratio_post": 1.0,
+    "gate": "Pass"
+   }
+  ],
+  "gate_pass": true,
+  "lower_bound_sex": []
+ },
+ "q_module": {
+  "features": [
+   "fh_htn",
+   "fh_dm",
+   "smoke_former",
+   "smoke_current",
+   "alc_cur"
+  ],
+  "beta": [
+   0.0,
+   0.0,
+   -0.10894816728551447,
+   -0.24823584304119478,
+   0.0
+  ],
+  "mean": [
+   0.3654439214413245,
+   0.27440293937538274,
+   0.24791333688510034,
+   0.1853578405256615,
+   0.5416444681228911
+  ],
+  "note": "ln T 이동 = Σβ(q−mean); 문진 빈칸이면 그 항목 q=mean(이동 0)"
+ },
+ "impute": {
+  "waist": {
+   "kind": "linear",
+   "log": false,
+   "predictors": [
+    "age_at_index",
+    "sex",
+    "sbp",
+    "dbp",
+    "bmi",
+    "fpg",
+    "tchol",
+    "tg",
+    "hdl",
+    "hb",
+    "creatinine",
+    "ast",
+    "alt"
+   ],
+   "intercept": 25.687584476820383,
+   "coef": [
+    0.07385142478253391,
+    2.4177326997164834,
+    0.007186398107960831,
+    -0.0014271430226038262,
+    2.218694537152495,
+    0.009805738470006405,
+    0.0036196657226405626,
+    0.0016821715928753479,
+    -0.02521095352568034,
+    0.07534165709426922,
+    -0.8730911374572392,
+    -0.00650613117114747,
+    0.01249388142336746
+   ],
+   "r2": 0.837,
+   "lo": 30,
+   "hi": 220,
+   "n": 37106
+  },
+  "ldl": {
+   "kind": "linear",
+   "log": false,
+   "predictors": [
+    "age_at_index",
+    "sex",
+    "sbp",
+    "dbp",
+    "bmi",
+    "fpg",
+    "tchol",
+    "tg",
+    "hdl",
+    "hb",
+    "creatinine",
+    "ast",
+    "alt"
+   ],
+   "intercept": 0.037259976691004226,
+   "coef": [
+    -0.04298083647348564,
+    1.280714022952876,
+    -0.029616827160705832,
+    0.0841159299430681,
+    0.26752692696259694,
+    0.019242449674939998,
+    0.9443303030133939,
+    -0.15062611705308818,
+    -1.1103547576953459,
+    0.6465718225459526,
+    -2.7792383753635903,
+    -0.019212915711621825,
+    0.024363630463284054
+   ],
+   "r2": 0.954,
+   "lo": 10,
+   "hi": 500,
+   "n": 37106
+  },
+  "ggt": {
+   "kind": "linear",
+   "log": true,
+   "predictors": [
+    "age_at_index",
+    "sex",
+    "sbp",
+    "dbp",
+    "bmi",
+    "fpg",
+    "tchol",
+    "tg",
+    "hdl",
+    "hb",
+    "creatinine",
+    "ast",
+    "alt"
+   ],
+   "intercept": 0.45201618431301194,
+   "coef": [
+    0.002739891327170929,
+    0.35109727371932903,
+    -0.00017537596029849827,
+    0.0045136841147316855,
+    0.022386440690896358,
+    0.0026254782120653467,
+    0.00034660530355240494,
+    0.002181402773749436,
+    0.005038812912042655,
+    0.041655644733794954,
+    -0.11844149276230177,
+    0.0020349131272233635,
+    0.007722078491759154
+   ],
+   "r2": 0.465,
+   "lo": 1,
+   "hi": 5000,
+   "n": 37106
+  },
+  "urine_protein": {
+   "kind": "mode",
+   "by_sex_band": {
+    "0|19-29": 1.0,
+    "0|30-39": 1.0,
+    "0|40-49": 1.0,
+    "0|50-59": 1.0,
+    "0|60-69": 1.0,
+    "0|70+": 1.0,
+    "1|19-29": 1.0,
+    "1|30-39": 1.0,
+    "1|40-49": 1.0,
+    "1|50-59": 1.0,
+    "1|60-69": 1.0,
+    "1|70+": 1.0
+   },
+   "default": 1.0
+  }
+ },
+ "required": [
+  "age_at_index",
+  "sex",
+  "sbp",
+  "dbp",
+  "bmi",
+  "fpg",
+  "tchol",
+  "tg",
+  "hdl",
+  "hb",
+  "creatinine",
+  "ast",
+  "alt"
+ ],
+ "eligibility_bmi_lt25": false,
+ "source_dir": "out_lca33p",
+ "horizons": [
+  1,
+  3,
+  5,
+  8,
+  10
+ ]
+}

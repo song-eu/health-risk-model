@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>위험예측 모델 시험</title>
+<style>
+:root {
+  --bg: #f6f7f9; --panel: #ffffff; --ink: #1d2433; --muted: #5d6779; --line: #dfe3ea; --accent: #2f6fde; --accent-soft: #e7effd;
+  --good: #1f8a5b; --warn: #b7791f; --bad: #c2410c; --chip: #eef1f5; --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12151b; --panel: #1b1f27; --ink: #e6e9ef; --muted: #9aa3b2; --line: #2c323d; --accent: #6b9cf0; --accent-soft: #1f2b40;
+    --good: #4fbf8a; --warn: #e0b04f; --bad: #f08a5d; --chip: #252a33;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12151b; --panel: #1b1f27; --ink: #e6e9ef; --muted: #9aa3b2; --line: #2c323d; --accent: #6b9cf0; --accent-soft: #1f2b40;
+  --good: #4fbf8a; --warn: #e0b04f; --bad: #f08a5d; --chip: #252a33;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.5 -apple-system, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; }
+header { padding: 20px 16px 8px; max-width: 1240px; margin: 0 auto; }
+header h1 { font-size: 20px; margin: 0 0 4px; }
+header p { margin: 0; color: var(--muted); }
+main { max-width: 1240px; margin: 0 auto; padding: 8px 16px 40px; display: grid; grid-template-columns: minmax(300px, 400px) 1fr; gap: 16px; align-items: start; }
+@media (max-width: 860px) { main { grid-template-columns: 1fr; } }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px; }
+.panel h2 { font-size: 15px; margin: 0 0 10px; }
+fieldset { border: 0; padding: 0; margin: 0 0 12px; }
+legend { font-weight: 600; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 10px; }
+label { display: flex; flex-direction: column; font-size: 12px; color: var(--muted); }
+label span.code { font-family: var(--mono); font-size: 10.5px; }
+input, select, textarea { font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 5px 7px; margin-top: 2px; width: 100%; }
+textarea { font-family: var(--mono); font-size: 12px; min-height: 160px; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+button { font: inherit; border: 1px solid var(--line); background: var(--panel); color: var(--ink); border-radius: 6px; padding: 6px 12px; cursor: pointer; }
+button.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+.tabs { display: flex; gap: 4px; margin-bottom: 10px; }
+.tabs button.on { background: var(--accent-soft); border-color: var(--accent); }
+.hidden { display: none !important; }
+.summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; margin-bottom: 12px; }
+.stat { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+.stat .k { font-size: 12px; color: var(--muted); }
+.stat .v { font-size: 22px; font-weight: 650; }
+.stat .s { font-size: 12px; color: var(--muted); }
+.group { margin: 14px 0 6px; font-weight: 600; color: var(--muted); font-size: 13px; }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 10px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px; }
+.card .top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.card .name { font-weight: 650; }
+.card .code { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.card .risk { font-size: 24px; font-weight: 650; margin: 2px 0; }
+.card .meta { font-size: 12px; color: var(--muted); }
+.card.off { opacity: .75; }
+.badge { display: inline-block; font-size: 11px; padding: 1px 7px; border-radius: 999px; background: var(--chip); color: var(--muted); }
+.badge.ri1, .badge.ri2 { color: var(--good); } .badge.ri3 { color: var(--warn); } .badge.ri4, .badge.ri5 { color: var(--bad); }
+.badge.imp-하 { color: var(--muted); } .badge.imp-중 { color: var(--warn); } .badge.imp-상 { color: var(--bad); } .badge.err { color: var(--bad); }
+.imputed { font-size: 11.5px; color: var(--muted); margin-top: 4px; }
+.bars { display: flex; align-items: flex-end; gap: 2px; height: 34px; margin: 8px 0 4px; }
+.bars div { flex: 1; background: var(--accent); opacity: .75; border-radius: 2px 2px 0 0; min-height: 1px; }
+.factors { margin: 6px 0 0; padding: 0; list-style: none; font-size: 12px; }
+.factors li { display: flex; justify-content: space-between; gap: 8px; border-top: 1px dashed var(--line); padding: 3px 0; }
+.factors li b { font-weight: 600; }
+pre { font-family: var(--mono); font-size: 11.5px; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 10px; overflow: auto; max-height: 520px; margin: 0; }
+.note { font-size: 12px; color: var(--muted); margin-top: 10px; }
+.err { color: var(--bad); font-size: 13px; margin-top: 8px; white-space: pre-wrap; }
+footer { max-width: 1240px; margin: 0 auto; padding: 0 16px 30px; color: var(--muted); font-size: 12px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>위험예측 모델 시험 페이지</h1>
+  <p>19개 질환 모델과 건강나이를 이 파일 하나로 돌려 봅니다. 입력은 애니핏 API 항목정의서 코드, 출력은 <code>api/anyfit_api.py</code> 와 같은 구조입니다. 계산은 모두 브라우저 안에서 하며 입력값을 어디에도 보내지 않습니다.<br>
+  빈칸은 채워서 계산하고(채운 항목·영향도 상·중·하 표시), 나이·성별이 비면 "입력 오류"입니다.</p>
+</header>
+<main>
+  <section class="panel" aria-label="입력">
+    <div class="tabs" role="tablist">
+      <button id="tab-form" class="on" role="tab">입력 양식</button>
+      <button id="tab-json" role="tab">JSON 입력</button>
+    </div>
+    <form id="form" autocomplete="off"></form>
+    <div id="jsonbox" class="hidden">
+      <textarea id="jsonin" spellcheck="false" aria-label="애니핏 형식 JSON 입력(1건 또는 배열)"></textarea>
+      <div class="note">애니핏 형식 레코드 1건(객체) 또는 여러 건(배열). 여러 건이면 화면에는 첫 건을, 오른쪽 JSON 출력에는 모두를 보입니다.</div>
+    </div>
+    <div class="row">
+      <button class="primary" id="run">계산</button>
+      <button id="example">예시 입력</button>
+      <button id="clear">비우기</button>
+    </div>
+    <div id="error" class="err" role="alert"></div>
+  </section>
+  <section aria-label="결과">
+    <div class="tabs" role="tablist">
+      <button id="tab-cards" class="on" role="tab">결과</button>
+      <button id="tab-raw" role="tab">JSON 출력</button>
+    </div>
+    <div id="cardsview">
+      <div class="summary" id="summary"></div>
+      <div id="cards"></div>
+    </div>
+    <div id="rawview" class="hidden">
+      <div class="row" style="margin:0 0 8px"><button id="copy">복사</button></div>
+      <pre id="raw"></pre>
+    </div>
+  </section>
+</main>
+<footer id="footer"></footer>
+<script id="bundles" type="application/json">/*BUNDLES*/</script>
+<script>/*ENGINE*/</script>
+<script>
+(function () {
+  'use strict';
+  const BUNDLES = JSON.parse(document.getElementById('bundles').textContent);
+  const E = RiskEngine(BUNDLES);
+  const $ = id => document.getElementById(id);
+  const DIS = {   // 화면 이름·묶음
+    CVD: ['심혈관질환', '심뇌혈관·신장'], Stroke: ['뇌혈관질환', '심뇌혈관·신장'], CRF: ['말기콩팥병', '심뇌혈관·신장'],
+    DM: ['당뇨', '대사질환'], Hypertension: ['고혈압', '대사질환'], Hyperlipidemia: ['이상지질혈증', '대사질환'], Obesity: ['비만', '대사질환'],
+    Stomach: ['위암', '암'], Liver: ['간암', '암'], Lung: ['폐암', '암'], Colorectal: ['대장암', '암'], Pancreas: ['췌장암', '암'],
+    Prostate: ['전립선암', '암'], Breast: ['유방암', '암'], Thyroid: ['갑상선암', '암'], Uterus: ['자궁암', '암'],
+    Dementia: ['치매', '노인성 질환'], COPD: ['COPD(40세 이상)', '노인성 질환'], Fracture: ['골다공증성 골절(50세 이상)', '노인성 질환']
+  };
+  const GROUPS = ['대사질환', '심뇌혈관·신장', '노인성 질환', '암'];
+  const FIELDS = [
+    ['기본', [['AGE', '나이(또는 출생연도)'], ['SEX', '성별', [['', '-'], ['1', '남(1)'], ['2', '여(2)']]]]],
+    ['검진 수치', [['BMI', '체질량지수'], ['WAIST', '허리둘레 cm'], ['BP_HIGH', '수축기혈압'], ['BP_LWST', '이완기혈압'], ['BLDS', '공복혈당'], ['TOT_CHOLE', '총콜레스테롤'],
+      ['TRIGLYCERIDE', '중성지방'], ['HDL_CHOLE', 'HDL'], ['LDL_CHOLE', 'LDL'], ['HMG', '혈색소'], ['CREATININE', '크레아티닌'], ['SGOT_AST', 'AST'], ['SGPT_ALT', 'ALT'],
+      ['GAMMA_GTP', '감마GTP'], ['OLIG_PROTE_CD', '요단백(1–6 또는 음성·양성(+1)…)']]],
+    ['과거력(0/1)', [['HCHK_HPRTS_PMH_YN', '고혈압'], ['HCHK_DIABML_PMH_YN', '당뇨'], ['HCHK_HPLPDM_PMH_YN', '이상지질혈증'], ['HCHK_HDISE_PMH_YN', '심장질환'],
+      ['HCHK_APOP_PMH_YN', '뇌졸중'], ['HCHK_PHSS_PMH_YN', '폐결핵'], ['HCHK_LIVER_PMH_YN', '간장질환'], ['HCHK_ETCDSE_PMH_YN', '기타(암 포함)'], ['HCHK_CANCER_PMH_YN', '암'],
+      ['HCHK_THYROID_PMH_YN', '갑상선질환(가칭 필드)'], ['PREG_LACT_HIST_YN', '임신/수유 과거력(가칭 필드, 0 없음·1 있음)']]],
+    ['가족력(0/1)', [['FMLY_HPRTS_PATIEN_YN', '고혈압'], ['FMLY_DIABML_PATIEN_YN', '당뇨']]],
+    ['흡연·음주', [['SMOKING', '흡연 1–5(1 비흡연·2·3 과거·4·5 현재)'], ['DRINKING', '음주(≥2 = 음주)'], ['SMOKING_STATUS', '흡연 상태 1 비흡연·2 과거·3 현재'],
+      ['SMOKING_YEARS', '흡연 기간(년)'], ['SMOKING_PER_DAY', '하루 개비'], ['DRINKING_DAYS_WEEK', '주 음주일(0–7)'], ['DRINKING_AMOUNT', '1회 잔'],
+      ['DRINKING_TYPE', '주종', [['', '-'], ['소주', '소주'], ['맥주', '맥주'], ['막걸리', '막걸리'], ['와인', '와인'], ['양주', '양주']]]]]
+  ];
+  const EXAMPLE = { AGE: 52, SEX: 1, BMI: 24.1, WAIST: 86, BP_HIGH: 128, BP_LWST: 82, BLDS: 98, TOT_CHOLE: 205, TRIGLYCERIDE: 140, HDL_CHOLE: 48, LDL_CHOLE: 129,
+    HMG: 15.1, CREATININE: 1.0, SGOT_AST: 26, SGPT_ALT: 31, GAMMA_GTP: 40, OLIG_PROTE_CD: 1, HCHK_HPRTS_PMH_YN: 0, HCHK_DIABML_PMH_YN: 0, HCHK_HPLPDM_PMH_YN: 0,
+    HCHK_HDISE_PMH_YN: 0, HCHK_APOP_PMH_YN: 0, HCHK_PHSS_PMH_YN: 0, HCHK_ETCDSE_PMH_YN: 0, FMLY_HPRTS_PATIEN_YN: 0, FMLY_DIABML_PATIEN_YN: 1,
+    SMOKING: 4, DRINKING: 2, SMOKING_STATUS: 3, SMOKING_YEARS: 25, SMOKING_PER_DAY: 15, DRINKING_DAYS_WEEK: 2, DRINKING_AMOUNT: 5, DRINKING_TYPE: '소주' };
+
+  // ---- 양식 ----
+  const form = $('form');
+  for (const [title, fields] of FIELDS) {
+    const fs = document.createElement('fieldset'), lg = document.createElement('legend'), g = document.createElement('div');
+    lg.textContent = title; g.className = 'grid'; fs.append(lg, g);
+    for (const [code, name, opts] of fields) {
+      const l = document.createElement('label'), t = document.createElement('span'), c = document.createElement('span');
+      t.textContent = name; c.className = 'code'; c.textContent = code;
+      let el;
+      if (opts) { el = document.createElement('select'); for (const [v, n] of opts) { const o = document.createElement('option'); o.value = v; o.textContent = n; el.append(o); } }
+      else { el = document.createElement('input'); el.type = 'text'; el.inputMode = code === 'OLIG_PROTE_CD' ? 'text' : 'decimal'; }
+      el.name = code; el.id = 'f-' + code; l.append(t, c, el); g.append(l);
+    }
+    form.append(fs);
+  }
+  form.addEventListener('submit', e => { e.preventDefault(); run(); });
+  function readForm() {
+    const r = {};
+    for (const el of form.elements) {
+      if (!el.name || el.value.trim() === '') continue;
+      const v = el.value.trim(), n = Number(v);
+      r[el.name] = (el.name === 'DRINKING_TYPE' || el.name === 'OLIG_PROTE_CD' && isNaN(n)) ? v : (isNaN(n) ? v : n);
+    }
+    return r;
+  }
+  function fillForm(r) { for (const el of form.elements) if (el.name) el.value = r[el.name] === undefined || r[el.name] === null ? '' : String(r[el.name]); }
+
+  // ---- 탭 ----
+  let mode = 'form';
+  function tab(on, off, showEl, hideEl) { $(on).classList.add('on'); $(off).classList.remove('on'); $(showEl).classList.remove('hidden'); $(hideEl).classList.add('hidden'); }
+  $('tab-form').onclick = () => { mode = 'form'; tab('tab-form', 'tab-json', 'form', 'jsonbox'); };
+  $('tab-json').onclick = () => { mode = 'json'; tab('tab-json', 'tab-form', 'jsonbox', 'form'); if (!$('jsonin').value.trim()) $('jsonin').value = JSON.stringify(readForm(), null, 1); };
+  $('tab-cards').onclick = () => tab('tab-cards', 'tab-raw', 'cardsview', 'rawview');
+  $('tab-raw').onclick = () => tab('tab-raw', 'tab-cards', 'rawview', 'cardsview');
+  $('example').onclick = () => { fillForm(EXAMPLE); $('jsonin').value = JSON.stringify(EXAMPLE, null, 1); run(); };
+  $('clear').onclick = () => { fillForm({}); $('jsonin').value = ''; $('summary').innerHTML = ''; $('cards').innerHTML = ''; $('raw').textContent = ''; $('error').textContent = ''; };
+  $('run').onclick = run;
+  $('copy').onclick = () => { try { navigator.clipboard.writeText($('raw').textContent); } catch (e) { /* 복사 불가 환경 */ } };
+
+  // ---- 계산·표시 ----
+  const pct = v => (v === null || v === undefined) ? '–' : (v * 100 < 0.01 && v > 0 ? '<0.01%' : (v * 100).toFixed(v * 100 < 1 ? 3 : 2) + '%');
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  function run() {
+    $('error').textContent = '';
+    let recs;
+    try {
+      if (mode === 'json') { const j = JSON.parse($('jsonin').value); recs = Array.isArray(j) ? j : [j]; }
+      else recs = [readForm()];
+    } catch (e) { $('error').textContent = 'JSON 을 읽지 못했습니다: ' + e.message; return; }
+    if (!recs.length) { $('error').textContent = '입력이 없습니다.'; return; }
+    let outs;
+    try { outs = recs.map(r => E.predictAnyfit(r)); } catch (e) { $('error').textContent = '계산 오류: ' + e.message; return; }
+    $('raw').textContent = JSON.stringify(outs.length === 1 ? outs[0] : outs, null, 1);
+    render(outs[0]);
+  }
+  function render(o) {
+    const inp = o.input, ha = o.HEALTH_AGE_INFO || {};
+    const flags = (inp.input_flags || []).map(esc).join(' · ');
+    $('summary').innerHTML = `
+      <div class="stat"><div class="k">나이 · 성별</div><div class="v">${inp.age ?? '–'}${inp.sex === null ? '' : (inp.sex === 1 ? ' · 남' : ' · 여')}</div>
+        <div class="s">흡연 ${inp.smoke_current === 1 ? '현재' : inp.smoke_former === 1 ? '과거' : inp.smoke_current === 0 ? '비흡연' : '–'}${inp.pack_years !== null ? ` · ${inp.pack_years}갑년` : ''} · 음주 ${inp.alc_cur === 1 ? '예' : inp.alc_cur === 0 ? '아니오' : '–'}${inp.alc_g_week !== null ? ` · 주 ${inp.alc_g_week} g` : ''}</div></div>
+      <div class="stat"><div class="k">건강나이</div><div class="v">${o.HEALTH_AGE ?? '–'}</div><div class="s">${esc(ha.STATUS || '')}${ha.REASON ? ' — ' + esc(ha.REASON) : ''}${ha.IMPUTED ? ' · 채운 항목: ' + esc(ha.IMPUTED) : ''}${ha.INPUT_IMPACT ? ` <span class="badge imp-${esc(ha.INPUT_IMPACT)}">영향 ${esc(ha.INPUT_IMPACT)}</span>` : ''}</div></div>
+      <div class="stat"><div class="k">기대수명(평균)</div><div class="v">${o.LIFE_SPAN ?? '–'}</div><div class="s">같은 성·나이 평균 ${ha.AVG_LIFE_SPAN ?? '–'} · 남은 기대여명 ${o.LIFE_EXPECTANCY ?? '–'}</div></div>
+      ${flags ? `<div class="stat"><div class="k">입력 점검</div><div class="s">${flags}</div></div>` : ''}`;
+    let html = '';
+    for (const grp of GROUPS) {
+      html += `<div class="group">${grp}</div><div class="cards">`;
+      for (const [code, [name, g]] of Object.entries(DIS)) {
+        if (g !== grp || !o[code]) continue;
+        const d = o[code], ok = d.STATUS === '정상';
+        const by = d.PROBABILITY_BY_YEAR || [], mx = Math.max(...by, 1e-12);
+        const fl = (L, title) => L.length ? `<ul class="factors"><li><b>${title}</b><span>위험 감소</span></li>${L.slice(0, 3).map(f =>
+          `<li><span>${esc(f.FACTOR_NAME)}${f.VALUE_CURRENT !== null ? ` ${esc(f.VALUE_CURRENT)}` : ''}${f.VALUE_RECOMMENDED !== undefined && f.VALUE_RECOMMENDED !== null ? ` → ${f.VALUE_RECOMMENDED}` : ''}</span><span>−${f.CHANGE_RISK_RATIO}%</span></li>`).join('')}</ul>` : '';
+        const imp = (d.IMPUTED_INPUTS || []).length ? `<div class="imputed">채운 항목: ${d.IMPUTED_INPUTS.map(esc).join(', ')} · <span class="badge imp-${esc(d.INPUT_IMPACT)}">영향 ${esc(d.INPUT_IMPACT)}</span></div>` : '';
+        html += `<div class="card${ok ? '' : ' off'}">
+          <div class="top"><span class="name">${name}</span><span class="code">${code}</span></div>
+          ${ok ? `<div class="risk">${pct(d.PROBABILITY)}</div>
+            <div class="meta">10년 위험${d.RISK_INDEX ? ` · <span class="badge ri${d.RISK_INDEX}">등급 ${d.RISK_INDEX}/5</span>` : ''}${d.PROBABILITY_RANK !== null ? ` · 같은 성·연령 ${d.PROBABILITY_RANK}백분위` : ''}${d.DS_AGE !== null ? ` · 질병나이 ${d.DS_AGE}` : ''}</div>
+            <div class="bars" title="1~10년차 위험">${by.map((v, i) => `<div style="height:${Math.max(2, v / mx * 100)}%" title="${i + 1}년 ${pct(v)}"></div>`).join('')}</div>
+            ${imp}${fl(d.CONTROLLABLE_FACTOR, '조절 가능')}${fl(d.UNCONTROLLABLE_FACTOR, '조절 불가')}`
+          : `<div class="risk">–</div><div class="meta"><span class="badge${d.STATUS === '입력 오류' ? ' err' : ''}">${esc(d.STATUS)}</span> ${esc(d.REASON || '')}</div>`}
+        </div>`;
+      }
+      html += '</div>';
+    }
+    $('cards').innerHTML = html;
+  }
+  const vers = Object.entries(BUNDLES).map(([k, b]) => `${k} ${b.version || (b.meta && b.meta.version) || ''}`).join(' · ');
+  $('footer').textContent = '모델 버전(sha256 앞 16자리): ' + vers + ' — /*BUILD*/';
+  fillForm(EXAMPLE); run();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,412 @@
+{
+ "disease": "esr33",
+ "definition": "말기콩팥병 최초일 = min(A 진단 N18.5(구 N18.0)·Z94.0·T86.1 최초 등재일, B eGFR(CKD-EPI 2021)<15 가 사이값 모두 <15 로 90일 이상 이어진 날). 기준일 유병·index 후 1년 안 발생 제외",
+ "features": [
+  "age_at_index",
+  "sex",
+  "sbp",
+  "dbp",
+  "bmi",
+  "waist",
+  "fpg",
+  "tchol",
+  "tg",
+  "hdl",
+  "ldl",
+  "hb",
+  "creatinine",
+  "ast",
+  "alt",
+  "ggt",
+  "urine_protein",
+  "hx_dm",
+  "hx_htn",
+  "hx_dyslipidemia",
+  "hx_cvd",
+  "hx_cerebrovascular",
+  "hx_tb",
+  "hx_others"
+ ],
+ "sigma": 1.0,
+ "monotone": {
+  "age_at_index": -1,
+  "sbp": -1,
+  "fpg": -1,
+  "creatinine": -1,
+  "urine_protein": -1,
+  "hx_dm": -1,
+  "hx_htn": -1,
+  "hx_dyslipidemia": -1,
+  "hx_cvd": -1,
+  "hx_cerebrovascular": -1,
+  "hx_others": -1
+ },
+ "xgboost": "3.4.1",
+ "gpop_applied": true,
+ "gpop": {
+  "params": {
+   "0": {
+    "age_mid": [
+     25.0,
+     35.0,
+     45.0,
+     55.0,
+     65.0,
+     75.0
+    ],
+    "shift": [
+     0.9114,
+     0.9114,
+     1.0677,
+     1.0677,
+     1.0677,
+     1.0677
+    ]
+   },
+   "1": {
+    "age_mid": [
+     25.0,
+     35.0,
+     45.0,
+     55.0,
+     65.0,
+     75.0
+    ],
+    "shift": [
+     0.1704,
+     0.1704,
+     0.1704,
+     0.1704,
+     0.1704,
+     0.1704
+    ]
+   }
+  },
+  "mode": "band_relax",
+  "target_source": "NHIS 표본코호트 말기콩팥병 발생률(Lee 2020 DMJ 보충표 2, 2013–2015 평균) × 성비(신규 혈액투석 남 58.5%) → 10년 누적(integral) — 말기콩팥병 하한",
+  "table": [
+   {
+    "sex": 0,
+    "age": "19-29",
+    "n": 2073,
+    "target": 0.0006,
+    "pred_pre": 0.0002,
+    "ratio_pre": 0.37,
+    "pred_post": 0.0005,
+    "ratio_post": 0.91,
+    "gate": "Pass"
+   },
+   {
+    "sex": 0,
+    "age": "30-39",
+    "n": 2284,
+    "target": 0.0007,
+    "pred_pre": 0.0003,
+    "ratio_pre": 0.44,
+    "pred_post": 0.0008,
+    "ratio_post": 1.1,
+    "gate": "Pass"
+   },
+   {
+    "sex": 0,
+    "age": "40-49",
+    "n": 3172,
+    "target": 0.0018,
+    "pred_pre": 0.0005,
+    "ratio_pre": 0.29,
+    "pred_post": 0.0014,
+    "ratio_post": 0.75,
+    "gate": "Pass"
+   },
+   {
+    "sex": 0,
+    "age": "50-59",
+    "n": 3599,
+    "target": 0.0025,
+    "pred_pre": 0.001,
+    "ratio_pre": 0.41,
+    "pred_post": 0.0022,
+    "ratio_post": 0.89,
+    "gate": "Pass"
+   },
+   {
+    "sex": 0,
+    "age": "60-69",
+    "n": 3866,
+    "target": 0.0058,
+    "pred_pre": 0.0023,
+    "ratio_pre": 0.39,
+    "pred_post": 0.0051,
+    "ratio_post": 0.87,
+    "gate": "Pass"
+   },
+   {
+    "sex": 0,
+    "age": "70+",
+    "n": 3636,
+    "target": 0.0091,
+    "pred_pre": 0.0065,
+    "ratio_pre": 0.72,
+    "pred_post": 0.0148,
+    "ratio_post": 1.62,
+    "gate": "Pass"
+   },
+   {
+    "sex": 1,
+    "age": "19-29",
+    "n": 1932,
+    "target": 0.0008,
+    "pred_pre": 0.0005,
+    "ratio_pre": 0.6,
+    "pred_post": 0.0006,
+    "ratio_post": 0.7,
+    "gate": "Pass"
+   },
+   {
+    "sex": 1,
+    "age": "30-39",
+    "n": 1875,
+    "target": 0.001,
+    "pred_pre": 0.001,
+    "ratio_pre": 1.0,
+    "pred_post": 0.0012,
+    "ratio_post": 1.15,
+    "gate": "Pass"
+   },
+   {
+    "sex": 1,
+    "age": "40-49",
+    "n": 2435,
+    "target": 0.0026,
+    "pred_pre": 0.0022,
+    "ratio_pre": 0.84,
+    "pred_post": 0.0025,
+    "ratio_post": 0.95,
+    "gate": "Pass"
+   },
+   {
+    "sex": 1,
+    "age": "50-59",
+    "n": 2596,
+    "target": 0.0035,
+    "pred_pre": 0.0034,
+    "ratio_pre": 0.96,
+    "pred_post": 0.0038,
+    "ratio_post": 1.09,
+    "gate": "Pass"
+   },
+   {
+    "sex": 1,
+    "age": "60-69",
+    "n": 2955,
+    "target": 0.0082,
+    "pred_pre": 0.0077,
+    "ratio_pre": 0.93,
+    "pred_post": 0.0086,
+    "ratio_post": 1.05,
+    "gate": "Pass"
+   },
+   {
+    "sex": 1,
+    "age": "70+",
+    "n": 2878,
+    "target": 0.0128,
+    "pred_pre": 0.0113,
+    "ratio_pre": 0.88,
+    "pred_post": 0.0129,
+    "ratio_post": 1.01,
+    "gate": "Pass"
+   }
+  ],
+  "gate_pass": true,
+  "lower_bound_sex": [
+   0,
+   1
+  ]
+ },
+ "q_module": {
+  "features": [
+   "fh_htn",
+   "fh_dm",
+   "smoke_former",
+   "smoke_current",
+   "alc_cur"
+  ],
+  "beta": [
+   -0.3719043595634227,
+   0.0,
+   -0.04154344882237132,
+   0.0,
+   0.0
+  ],
+  "mean": [
+   0.3632053830860988,
+   0.27554448563484707,
+   0.25042301184433163,
+   0.1839678510998308,
+   0.5359560067681896
+  ],
+  "note": "ln T 이동 = Σβ(q−mean); 문진 빈칸이면 그 항목 q=mean(이동 0)"
+ },
+ "impute": {
+  "waist": {
+   "kind": "linear",
+   "log": false,
+   "predictors": [
+    "age_at_index",
+    "sex",
+    "sbp",
+    "dbp",
+    "bmi",
+    "fpg",
+    "tchol",
+    "tg",
+    "hdl",
+    "hb",
+    "creatinine",
+    "ast",
+    "alt"
+   ],
+   "intercept": 25.890190047219768,
+   "coef": [
+    0.07522346382078376,
+    2.508780672418779,
+    0.006162225438523707,
+    -0.0011931764267590188,
+    2.224591474527614,
+    0.010950447150242031,
+    0.0024798812187732527,
+    0.0017677464383539223,
+    -0.025720781133232385,
+    0.0922497677244977,
+    -1.416683399099321,
+    -0.006776919752199605,
+    0.01135625196527397
+   ],
+   "r2": 0.835,
+   "lo": 30,
+   "hi": 220,
+   "n": 38715
+  },
+  "ldl": {
+   "kind": "linear",
+   "log": false,
+   "predictors": [
+    "age_at_index",
+    "sex",
+    "sbp",
+    "dbp",
+    "bmi",
+    "fpg",
+    "tchol",
+    "tg",
+    "hdl",
+    "hb",
+    "creatinine",
+    "ast",
+    "alt"
+   ],
+   "intercept": 0.3634401734111634,
+   "coef": [
+    -0.04314457725321764,
+    1.4398518766273836,
+    -0.03522209603889977,
+    0.08904160650844524,
+    0.25725368562897794,
+    0.021110067899141164,
+    0.9433950744122724,
+    -0.14889611771034728,
+    -1.1072680930288594,
+    0.6348453528586866,
+    -2.8738953488101946,
+    -0.016996926618427027,
+    0.02170191787932769
+   ],
+   "r2": 0.954,
+   "lo": 10,
+   "hi": 500,
+   "n": 38715
+  },
+  "ggt": {
+   "kind": "linear",
+   "log": true,
+   "predictors": [
+    "age_at_index",
+    "sex",
+    "sbp",
+    "dbp",
+    "bmi",
+    "fpg",
+    "tchol",
+    "tg",
+    "hdl",
+    "hb",
+    "creatinine",
+    "ast",
+    "alt"
+   ],
+   "intercept": 0.4782134324072387,
+   "coef": [
+    0.0025997863421078076,
+    0.3575829644401695,
+    -0.00014514484690202926,
+    0.004612575629341266,
+    0.022355148205163124,
+    0.002713197417158045,
+    0.0003113533209786138,
+    0.0022220980730699533,
+    0.005272965139313661,
+    0.03864963794579976,
+    -0.1521211522796565,
+    0.0030690359846762263,
+    0.0074371783534174455
+   ],
+   "r2": 0.462,
+   "lo": 1,
+   "hi": 5000,
+   "n": 38715
+  },
+  "urine_protein": {
+   "kind": "mode",
+   "by_sex_band": {
+    "0|19-29": 1.0,
+    "0|30-39": 1.0,
+    "0|40-49": 1.0,
+    "0|50-59": 1.0,
+    "0|60-69": 1.0,
+    "0|70+": 1.0,
+    "1|19-29": 1.0,
+    "1|30-39": 1.0,
+    "1|40-49": 1.0,
+    "1|50-59": 1.0,
+    "1|60-69": 1.0,
+    "1|70+": 1.0
+   },
+   "default": 1.0
+  }
+ },
+ "required": [
+  "age_at_index",
+  "sex",
+  "sbp",
+  "dbp",
+  "bmi",
+  "fpg",
+  "tchol",
+  "tg",
+  "hdl",
+  "hb",
+  "creatinine",
+  "ast",
+  "alt"
+ ],
+ "eligibility_bmi_lt25": false,
+ "source_dir": "out_esr33p",
+ "horizons": [
+  1,
+  3,
+  5,
+  8,
+  10
+ ]
+}
