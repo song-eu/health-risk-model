@@ -1,0 +1,860 @@
+{
+  "input": {
+    "age": 52.0,
+    "sex": 1,
+    "smoke_former": 0.0,
+    "smoke_current": 1.0,
+    "pack_years": null,
+    "alc_cur": 1.0,
+    "alc_days_week": null,
+    "alc_g_week": null,
+    "input_flags": []
+  },
+  "CVD": {
+    "STATUS": "정상",
+    "REASON": null,
+    "MODEL_VERSION": "fd662cd4e31eca71",
+    "PROBABILITY": 0.153,
+    "PROBABILITY_BY_YEAR": [
+      0.0339,
+      0.0453,
+      0.0537,
+      0.0674,
+      0.0802,
+      0.0949,
+      0.1092,
+      0.1232,
+      0.1382,
+      0.153
+    ],
+    "STATISTIC_DIFF": 0.0098,
+    "PROBABILITY_RANK": 62.79,
+    "STATISTIC_RATIO": 1.737,
+    "DS_AGE": 59.8,
+    "RISK_INDEX": 4,
+    "CONTROLLABLE_FACTOR": [
+      {
+        "RANK": 1,
+        "FACTOR_NAME": "SMOKING",
+        "CHANGE_RISK_RATIO": 7.65,
+        "VALUE_CURRENT": 4.0,
+        "VALUE_RECOMMENDED": null,
+        "BASIS": "RISK_CHANGE"
+      },
+      {
+        "RANK": 2,
+        "FACTOR_NAME": "BP_HIGH",
+        "CHANGE_RISK_RATIO": 4.31,
+        "VALUE_CURRENT": 128.0,
+        "VALUE_RECOMMENDED": 120.0,
+        "BASIS": "RISK_CHANGE"
+      },
+      {
+        "RANK": 3,
+        "FACTOR_NAME": "DRINKING",
+        "CHANGE_RISK_RATIO": 3.59,
+        "VALUE_CURRENT": 2.0,
+        "VALUE_RECOMMENDED": null,
+        "BASIS": "RISK_CHANGE"
+      }
+    ],
+    "UNCONTROLLABLE_FACTOR": [],
+    "IMPUTED_INPUTS": [],
+    "INPUT_IMPACT": null
+  },
+  "Stroke": {
+    "STATUS": "정상",
+    "REASON": null,
+    "MODEL_VERSION": "4c86f8cc5d4e6df7",
+    "PROBABILITY": 0.1043,
+    "PROBABILITY_BY_YEAR": [
+      0.0154,
+      0.0224,
+      0.028,
+      0.0361,
+      0.0439,
+      0.0533,
+      0.0628,
+      0.0723,
+      0.0878,
+      0.1043
+    ],
+    "STATISTIC_DIFF": 0.0042,
+    "PROBABILITY_RANK": 65.0,
+    "STATISTIC_RATIO": 1.262,
+    "DS_AGE": 56.7,
+    "RISK_INDEX": 4,
+    "CONTROLLABLE_FACTOR": [
+      {
+        "RANK": 1,
+        "FACTOR_NAME": "SMOKING",
+        "CHANGE_RISK_RATIO": 7.77,
+        "VALUE_CURRENT": 4.0,
+        "VALUE_RECOMMENDED": null,
+        "BASIS": "RISK_CHANGE"
+      },
+      {
+        "RANK": 2,
+        "FACTOR_NAME": "DRINKING",
+        "CHANGE_RISK_RATIO": 6.33,
+        "VALUE_CURRENT": 2.0,
+        "VALUE_RECOMMENDED": null,
+        "BASIS": "RISK_CHANGE"
+      },
+      {
+        "RANK": 3,
+        "FACTOR_NAME": "BP_HIGH",
+        "CHANGE_RISK_RATIO": 2.11,
+        "VALUE_CURRENT": 128.0,
+        "VALUE_RECOMMENDED": 120.0,
+        "BASIS": "RISK_CHANGE"
+      }
+    ],
+    "UNCONTROLLABLE_FACTOR": [],
+    "IMPUTED_INPUTS": [],
+    "INPUT_IMPACT": null
+  },
+  "CRF": {
+    "STATUS": "정상",
+    "REASON": null,
+    "MODEL_VERSION": "d230ca14f8ecb065",
+    "PROBABILITY": 0.000232,
+    "PROBABILITY_BY_YEAR": [
+      0.0,
+      1e-06,
+      2.1e-05,
+      5.1e-05,
+      0.000102,
+      0.000118,
+      0.000134,
+      0.000149,
+      0.000188,
+      0.000232
+    ],
+    "STATISTIC_DIFF": -0.0006,
+    "PROBABILITY_RANK": 59.6,
+    "STATISTIC_RATIO": 0.753,
+    "DS_AGE": 19.0,
+    "RISK_INDEX": 3,
+    "CONTROLLABLE_FACTOR": [
+      {
+        "RANK": 1,
+        "FACTOR_NAME": "SMOKING",
+        "CHANGE_RISK_RATIO": 0.0,
+        "VALUE_CURRENT": 4.0,
+        "VALUE_RECOMMENDED": null,
+        "BASIS": "MODEL_IMPACT",
+        "MODEL_IMPACT": 5.66
+      },
+      {
+        "RANK": 2,
+        "FACTOR_NAME": "GAMMA_GTP",
+        "CHANGE_RISK_RATIO": 0.0,
+        "VALUE_CURRENT": 40.0,
+        "VALUE_RECOMMENDED": 63.0,
+        "BASIS": "MODEL_IMPACT",
+        "MODEL_IMPACT": 2.63
+      },
+      {
+        "RANK": 3,
+        "FACTOR_NAME": "TOT_CHOLE",
+        "CHANGE_RISK_RATIO": 0.0,
+        "VALUE_CURRENT": 205.0,
+        "VALUE_RECOMMENDED": 200.0,
+        "BASIS": "MODEL_IMPACT",
+        "MODEL_IMPACT": -52.52
+      }
+    ],
+    "UNCONTROLLABLE_FACTOR": [],
+    "IMPUTED_INPUTS": [],
+    "INPUT_IMPACT": null
+  },
+  "DM": {
+    "STATUS": "정상",
+    "REASON": null,
+    "MODEL_VERSION": "6c3cc2203b56548f",
+    "PROBABILITY": 0.033,
+    "PROBABILITY_BY_YEAR": [
+      0.0014,
+      0.003,
+      0.0046,
+      0.0068,
+      0.0093,
+      0.0122,
+      0.0154,
+      0.0187,
+      0.0253,
+      0.033
+    ],
+    "STATISTIC_DIFF": -0.06,
+    "PROBABILITY_RANK": 34.25,
+    "STATISTIC_RATIO": 1.781,
+    "DS_AGE": 69.5,
+    "RISK_INDEX": 2,
+    "CONTROLLABLE_FACTOR": [
+      {
+        "RANK": 1,
+        "FACTOR_NAME": "SMOKING",
+        "CHANGE_RISK_RATIO": 14.24,
+        "VALUE_CURRENT": 4.0,
+        "VALUE_RECOMMENDED": null,
+        "BASIS": "RISK_CHANGE"
+      },
+      {
+        "RANK": 2,
+        "FACTOR_NAME": "BMI",
+        "CHANGE_RISK_RATIO": 10.0,
+        "VALUE_CURRENT": 24.1,
+        "VALUE_RECOMMENDED": 23.0,
+        "BASIS": "RISK_CHANGE"
+      },
+      {
+        "RANK": 3,
+        "FACTOR_NAME": "SGPT_ALT",
+        "CHANGE_RISK_RATIO": 0.0,
+        "VALUE_CURRENT": 31.0,
+        "VALUE_RECOMMENDED": 40.0,
+        "BASIS": "MODEL_IMPACT",
+        "MODEL_IMPACT": 7.96
+      }
+    ],
+    "UNCONTROLLABLE_FACTOR": [],
+    "IMPUTED_INPUTS": [],
+    "INPUT_IMPACT": null
+  },
+  "Hypertension": {
+    "STATUS": "정상",
+    "REASON": null,
+    "MODEL_VERSION": "6ba00012a182a574",
+    "PROBABILITY": 0.2221,
+    "PROBABILITY_BY_YEAR": [
+      0.0199,
+      0.0448,
+      0.0713,
+      0.0984,
+      0.1258,
+      0.1536,
+      0.1814,
+      0.209,
+      0.2158,
+      0.2221
+    ],
+    "STATISTIC_DIFF": 0.0425,
+    "PROBABILITY_RANK": 67.96,
+    "STATISTIC_RATIO": 3.881,
+    "DS_AGE": 90.0,
+    "RISK_INDEX": 4,
+    "CONTROLLABLE_FACTOR": [
+      {
+        "RANK": 1,
+        "FACTOR_NAME": "BP_HIGH",
+        "CHANGE_RISK_RATIO": 18.73,
+        "VALUE_CURRENT": 128.0,
+        "VALUE_RECOMMENDED": 120.0,
+        "BASIS": "RISK_CHANGE"
+      },
+      {
+        "RANK": 2,
+        "FACTOR_NAME": "BMI",
+        "CHANGE_RISK_RATIO": 2.34,
+        "VALUE_CURRENT": 24.1,
+        "VALUE_RECOMMENDED": 23.0,
+        "BASIS": "RISK_CHANGE"
+      },
+      {
+        "RANK": 3,
+        "FACTOR_NAME": "BP_LWST",
+        "CHANGE_RISK_RATIO": 0.81,
+        "VALUE_CURRENT": 82.0,
+        "VALUE_RECOMMENDED": 80.0,
+        "BASIS": "RISK_CHANGE"
+      }
+    ],
+    "UNCONTROLLABLE_FACTOR": [],
+    "IMPUTED_INPUTS": [],
+    "INPUT_IMPACT": null
+  },
+  "Hyperlipidemia": {
+    "STATUS": "정상",
+    "REASON": null,
+    "MODEL_VERSION": "44b2217c0b6eda3c",
+    "PROBABILITY": 0.5009,
+    "PROBABILITY_BY_YEAR": [
+      0.0582,
+      0.1246,
+      0.1911,
+      0.265,
+      0.3371,
+      0.3959,
+      0.4504,
+      0.5009,
+      0.5009,
+      0.5009
+    ],
+    "STATISTIC_DIFF": 0.0949,
+    "PROBABILITY_RANK": 74.11,
+    "STATISTIC_RATIO": 2.106,
+    "DS_AGE": 90.0,
+    "RISK_INDEX": 4,
+    "CONTROLLABLE_FACTOR": [
+      {
+        "RANK": 1,
+        "FACTOR_NAME": "SMOKING",
+        "CHANGE_RISK_RATIO": 11.4,
+        "VALUE_CURRENT": 4.0,
+        "VALUE_RECOMMENDED": null,
+        "BASIS": "RISK_CHANGE"
+      },
+      {
+        "RANK": 2,
+        "FACTOR_NAME": "DRINKING",
+        "CHANGE_RISK_RATIO": 11.4,
+        "VALUE_CURRENT": 2.0,
+        "VALUE_RECOMMENDED": null,
+        "BASIS": "RISK_CHANGE"
+      },
+      {
+        "RANK": 3,
+        "FACTOR_NAME": "TOT_CHOLE",
+        "CHANGE_RISK_RATIO": 3.19,
+        "VALUE_CURRENT": 205.0,
+        "VALUE_RECOMMENDED": 200.0,
+        "BASIS": "RISK_CHANGE"
+      }
+    ],
+    "UNCONTROLLABLE_FACTOR": [],
+    "IMPUTED_INPUTS": [],
+    "INPUT_IMPACT": null
+  },
+  "Stomach": {
+    "STATUS": "정상",
+    "REASON": null,
+    "MODEL_VERSION": "bb615ec97fdc957f",
+    "PROBABILITY": 0.0136,
+    "PROBABILITY_BY_YEAR": [
+      0.0004,
+      0.0014,
+      0.0028,
+      0.004,
+      0.0054,
+      0.0068,
+      0.0084,
+      0.01,
+      0.0117,
+      0.0136
+    ],
+    "STATISTIC_DIFF": 0.0045,
+    "PROBABILITY_RANK": 94.34,
+    "STATISTIC_RATIO": 1.791,
+    "DS_AGE": 58.5,
+    "RISK_INDEX": 5,
+    "CONTROLLABLE_FACTOR": [
+      {
+        "RANK": 1,
+        "FACTOR_NAME": "SMOKING",
+        "CHANGE_RISK_RATIO": 25.0,
+        "VALUE_CURRENT": 4.0,
+        "VALUE_RECOMMENDED": null,
+        "BASIS": "RISK_CHANGE"
+      },
+      {
+        "RANK": 2,
+        "FACTOR_NAME": "TOT_CHOLE",
+        "CHANGE_RISK_RATIO": 1.47,
+        "VALUE_CURRENT": 205.0,
+        "VALUE_RECOMMENDED": 200.0,
+        "BASIS": "RISK_CHANGE"
+      },
+      {
+        "RANK": 3,
+        "FACTOR_NAME": "GAMMA_GTP",
+        "CHANGE_RISK_RATIO": 0.0,
+        "VALUE_CURRENT": 40.0,
+        "VALUE_RECOMMENDED": 63.0,
+        "BASIS": "MODEL_IMPACT",
+        "MODEL_IMPACT": 4.1
+      }
+    ],
+    "UNCONTROLLABLE_FACTOR": [],
+    "IMPUTED_INPUTS": [],
+    "INPUT_IMPACT": null
+  },
+  "Liver": {
+    "STATUS": "정상",
+    "REASON": null,
+    "MODEL_VERSION": "8ddc14350eef3fc0",
+    "PROBABILITY": 0.00196,
+    "PROBABILITY_BY_YEAR": [
+      1e-05,
+      0.0001,
+      0.00035,
+      0.00047,
+      0.0006,
+      0.00075,
+      0.00092,
+      0.00108,
+      0.00148,
+      0.00196
+    ],
+    "STATISTIC_DIFF": -0.0018,
+    "PROBABILITY_RANK": 62.4,
+    "STATISTIC_RATIO": 0.989,
+    "DS_AGE": 52.3,
+    "RISK_INDEX": 4,
+    "CONTROLLABLE_FACTOR": [
+      {
+        "RANK": 1,
+        "FACTOR_NAME": "BMI",
+        "CHANGE_RISK_RATIO": 27.55,
+        "VALUE_CURRENT": 24.1,
+        "VALUE_RECOMMENDED": 23.0,
+        "BASIS": "RISK_CHANGE"
+      },
+      {
+        "RANK": 2,
+        "FACTOR_NAME": "SMOKING",
+        "CHANGE_RISK_RATIO": 0.0,
+        "VALUE_CURRENT": 4.0,
+        "VALUE_RECOMMENDED": null,
+        "BASIS": "MODEL_IMPACT",
+        "MODEL_IMPACT": 15.98
+      },
+      {
+        "RANK": 3,
+        "FACTOR_NAME": "TRIGLYCERIDE",
+        "CHANGE_RISK_RATIO": 0.0,
+        "VALUE_CURRENT": 140.0,
+        "VALUE_RECOMMENDED": 150.0,
+        "BASIS": "MODEL_IMPACT",
+        "MODEL_IMPACT": 5.13
+      }
+    ],
+    "UNCONTROLLABLE_FACTOR": [],
+    "IMPUTED_INPUTS": [
+      "HBSAG_RSLT",
+      "HCV_AB_RSLT"
+    ],
+    "INPUT_IMPACT": "상"
+  },
+  "Lung": {
+    "STATUS": "정상",
+    "REASON": null,
+    "MODEL_VERSION": "ffdd5af46a508113",
+    "PROBABILITY": 0.00968,
+    "PROBABILITY_BY_YEAR": [
+      0.00014,
+      0.00066,
+      0.00166,
+      0.00245,
+      0.00331,
+      0.0043,
+      0.00536,
+      0.00649,
+      0.00802,
+      0.00968
+    ],
+    "STATISTIC_DIFF": 0.0043,
+    "PROBABILITY_RANK": 98.82,
+    "STATISTIC_RATIO": 2.186,
+    "DS_AGE": 58.2,
+    "RISK_INDEX": 5,
+    "CONTROLLABLE_FACTOR": [
+      {
+        "RANK": 1,
+        "FACTOR_NAME": "SMOKING",
+        "CHANGE_RISK_RATIO": 50.83,
+        "VALUE_CURRENT": 4.0,
+        "VALUE_RECOMMENDED": null,
+        "BASIS": "RISK_CHANGE"
+      },
+      {
+        "RANK": 2,
+        "FACTOR_NAME": "HDL_CHOLE",
+        "CHANGE_RISK_RATIO": 0.0,
+        "VALUE_CURRENT": 48.0,
+        "VALUE_RECOMMENDED": 40.0,
+        "BASIS": "MODEL_IMPACT",
+        "MODEL_IMPACT": 2.59
+      },
+      {
+        "RANK": 3,
+        "FACTOR_NAME": "GAMMA_GTP",
+        "CHANGE_RISK_RATIO": 0.0,
+        "VALUE_CURRENT": 40.0,
+        "VALUE_RECOMMENDED": 63.0,
+        "BASIS": "MODEL_IMPACT",
+        "MODEL_IMPACT": 1.07
+      }
+    ],
+    "UNCONTROLLABLE_FACTOR": [],
+    "IMPUTED_INPUTS": [],
+    "INPUT_IMPACT": null
+  },
+  "Colorectal": {
+    "STATUS": "정상",
+    "REASON": null,
+    "MODEL_VERSION": "d325a05d1058894c",
+    "PROBABILITY": 0.008298,
+    "PROBABILITY_BY_YEAR": [
+      0.000672,
+      0.001343,
+      0.002014,
+      0.002708,
+      0.003406,
+      0.004233,
+      0.005087,
+      0.005963,
+      0.0071,
+      0.008298
+    ],
+    "STATISTIC_DIFF": 0.0001,
+    "PROBABILITY_RANK": 57.81,
+    "STATISTIC_RATIO": 1.077,
+    "DS_AGE": 53.8,
+    "RISK_INDEX": 3,
+    "CONTROLLABLE_FACTOR": [
+      {
+        "RANK": 1,
+        "FACTOR_NAME": "DRINKING",
+        "CHANGE_RISK_RATIO": 4.75,
+        "VALUE_CURRENT": 2.0,
+        "VALUE_RECOMMENDED": null,
+        "BASIS": "RISK_CHANGE"
+      },
+      {
+        "RANK": 2,
+        "FACTOR_NAME": "BMI",
+        "CHANGE_RISK_RATIO": 0.22,
+        "VALUE_CURRENT": 24.1,
+        "VALUE_RECOMMENDED": 23.0,
+        "BASIS": "RISK_CHANGE"
+      },
+      {
+        "RANK": 3,
+        "FACTOR_NAME": "SMOKING",
+        "CHANGE_RISK_RATIO": 0.0,
+        "VALUE_CURRENT": 4.0,
+        "VALUE_RECOMMENDED": null,
+        "BASIS": "MODEL_IMPACT",
+        "MODEL_IMPACT": 5.22
+      }
+    ],
+    "UNCONTROLLABLE_FACTOR": [],
+    "IMPUTED_INPUTS": [],
+    "INPUT_IMPACT": null
+  },
+  "Pancreas": {
+    "STATUS": "정상",
+    "REASON": null,
+    "MODEL_VERSION": "e9230b06c61308ac",
+    "PROBABILITY": 0.00083,
+    "PROBABILITY_BY_YEAR": [
+      0.0,
+      4e-05,
+      0.00016,
+      0.00019,
+      0.00023,
+      0.00029,
+      0.00035,
+      0.00042,
+      0.0006,
+      0.00083
+    ],
+    "STATISTIC_DIFF": -0.0006,
+    "PROBABILITY_RANK": 23.5,
+    "STATISTIC_RATIO": 0.821,
+    "DS_AGE": 49.4,
+    "RISK_INDEX": 2,
+    "CONTROLLABLE_FACTOR": [
+      {
+        "RANK": 1,
+        "FACTOR_NAME": "BMI",
+        "CHANGE_RISK_RATIO": 1.2,
+        "VALUE_CURRENT": 24.1,
+        "VALUE_RECOMMENDED": 23.0,
+        "BASIS": "RISK_CHANGE"
+      },
+      {
+        "RANK": 2,
+        "FACTOR_NAME": "BLDS",
+        "CHANGE_RISK_RATIO": 0.0,
+        "VALUE_CURRENT": 98.0,
+        "VALUE_RECOMMENDED": 100.0,
+        "BASIS": "MODEL_IMPACT",
+        "MODEL_IMPACT": -64.54
+      },
+      {
+        "RANK": 3,
+        "FACTOR_NAME": "SGPT_ALT",
+        "CHANGE_RISK_RATIO": 0.0,
+        "VALUE_CURRENT": 31.0,
+        "VALUE_RECOMMENDED": 40.0,
+        "BASIS": "MODEL_IMPACT",
+        "MODEL_IMPACT": -20.74
+      }
+    ],
+    "UNCONTROLLABLE_FACTOR": [],
+    "IMPUTED_INPUTS": [],
+    "INPUT_IMPACT": null
+  },
+  "Prostate": {
+    "STATUS": "정상",
+    "REASON": null,
+    "MODEL_VERSION": "78abf393921cd041",
+    "PROBABILITY": 0.003436,
+    "PROBABILITY_BY_YEAR": [
+      9e-06,
+      7.3e-05,
+      0.000245,
+      0.00046,
+      0.000749,
+      0.001135,
+      0.001613,
+      0.002186,
+      0.002776,
+      0.003436
+    ],
+    "STATISTIC_DIFF": -0.0014,
+    "PROBABILITY_RANK": 10.36,
+    "STATISTIC_RATIO": 0.769,
+    "DS_AGE": 50.5,
+    "RISK_INDEX": 1,
+    "CONTROLLABLE_FACTOR": [
+      {
+        "RANK": 1,
+        "FACTOR_NAME": "TOT_CHOLE",
+        "CHANGE_RISK_RATIO": 0.0,
+        "VALUE_CURRENT": 205.0,
+        "VALUE_RECOMMENDED": 200.0,
+        "BASIS": "MODEL_IMPACT",
+        "MODEL_IMPACT": 4.3
+      },
+      {
+        "RANK": 2,
+        "FACTOR_NAME": "GAMMA_GTP",
+        "CHANGE_RISK_RATIO": 0.0,
+        "VALUE_CURRENT": 40.0,
+        "VALUE_RECOMMENDED": 63.0,
+        "BASIS": "MODEL_IMPACT",
+        "MODEL_IMPACT": 1.01
+      },
+      {
+        "RANK": 3,
+        "FACTOR_NAME": "TRIGLYCERIDE",
+        "CHANGE_RISK_RATIO": 0.0,
+        "VALUE_CURRENT": 140.0,
+        "VALUE_RECOMMENDED": 150.0,
+        "BASIS": "MODEL_IMPACT",
+        "MODEL_IMPACT": -11.45
+      }
+    ],
+    "UNCONTROLLABLE_FACTOR": [],
+    "IMPUTED_INPUTS": [],
+    "INPUT_IMPACT": null
+  },
+  "Breast": {
+    "STATUS": "예측 대상 아님",
+    "REASON": "남성",
+    "MODEL_VERSION": "502d82492a10a6f7",
+    "PROBABILITY": null,
+    "PROBABILITY_BY_YEAR": null,
+    "STATISTIC_DIFF": null,
+    "PROBABILITY_RANK": null,
+    "STATISTIC_RATIO": null,
+    "DS_AGE": null,
+    "RISK_INDEX": null,
+    "CONTROLLABLE_FACTOR": [],
+    "UNCONTROLLABLE_FACTOR": [],
+    "IMPUTED_INPUTS": [],
+    "INPUT_IMPACT": null
+  },
+  "Thyroid": {
+    "STATUS": "정상",
+    "REASON": null,
+    "MODEL_VERSION": "38a9b90715b85a48",
+    "PROBABILITY": 0.004011,
+    "PROBABILITY_BY_YEAR": [
+      0.000304,
+      0.000608,
+      0.000912,
+      0.001378,
+      0.001898,
+      0.002282,
+      0.002667,
+      0.003052,
+      0.003526,
+      0.004011
+    ],
+    "STATISTIC_DIFF": -0.0007,
+    "PROBABILITY_RANK": 22.55,
+    "STATISTIC_RATIO": 0.944,
+    "DS_AGE": 28.1,
+    "RISK_INDEX": 2,
+    "CONTROLLABLE_FACTOR": [
+      {
+        "RANK": 1,
+        "FACTOR_NAME": "BMI",
+        "CHANGE_RISK_RATIO": 5.58,
+        "VALUE_CURRENT": 24.1,
+        "VALUE_RECOMMENDED": 23.0,
+        "BASIS": "RISK_CHANGE"
+      },
+      {
+        "RANK": 2,
+        "FACTOR_NAME": "BP_HIGH",
+        "CHANGE_RISK_RATIO": 1.57,
+        "VALUE_CURRENT": 128.0,
+        "VALUE_RECOMMENDED": 120.0,
+        "BASIS": "RISK_CHANGE"
+      },
+      {
+        "RANK": 3,
+        "FACTOR_NAME": "TRIGLYCERIDE",
+        "CHANGE_RISK_RATIO": 0.0,
+        "VALUE_CURRENT": 140.0,
+        "VALUE_RECOMMENDED": 150.0,
+        "BASIS": "MODEL_IMPACT",
+        "MODEL_IMPACT": 0.9
+      }
+    ],
+    "UNCONTROLLABLE_FACTOR": [],
+    "IMPUTED_INPUTS": [],
+    "INPUT_IMPACT": null
+  },
+  "Uterus": {
+    "STATUS": "예측 대상 아님",
+    "REASON": "남성",
+    "MODEL_VERSION": "6945e7c3d44bee05",
+    "PROBABILITY": null,
+    "PROBABILITY_BY_YEAR": null,
+    "STATISTIC_DIFF": null,
+    "PROBABILITY_RANK": null,
+    "STATISTIC_RATIO": null,
+    "DS_AGE": null,
+    "RISK_INDEX": null,
+    "CONTROLLABLE_FACTOR": [],
+    "UNCONTROLLABLE_FACTOR": [],
+    "IMPUTED_INPUTS": [],
+    "INPUT_IMPACT": null
+  },
+  "Fracture": {
+    "STATUS": "정상",
+    "REASON": null,
+    "MODEL_VERSION": "47d42a69321cce44",
+    "PROBABILITY": 0.0022,
+    "PROBABILITY_BY_YEAR": [
+      0.0003,
+      0.0006,
+      0.001,
+      0.001,
+      0.0011,
+      0.0013,
+      0.0015,
+      0.0017,
+      0.0019,
+      0.0022
+    ],
+    "STATISTIC_DIFF": -0.0005,
+    "PROBABILITY_RANK": 44.0,
+    "STATISTIC_RATIO": 0.715,
+    "DS_AGE": 19.0,
+    "RISK_INDEX": 3,
+    "CONTROLLABLE_FACTOR": [
+      {
+        "RANK": 1,
+        "FACTOR_NAME": "SMOKING",
+        "CHANGE_RISK_RATIO": 9.09,
+        "VALUE_CURRENT": 4.0,
+        "VALUE_RECOMMENDED": null,
+        "BASIS": "RISK_CHANGE"
+      },
+      {
+        "RANK": 2,
+        "FACTOR_NAME": "TRIGLYCERIDE",
+        "CHANGE_RISK_RATIO": 0.0,
+        "VALUE_CURRENT": 140.0,
+        "VALUE_RECOMMENDED": 150.0,
+        "BASIS": "MODEL_IMPACT",
+        "MODEL_IMPACT": 7.14
+      },
+      {
+        "RANK": 3,
+        "FACTOR_NAME": "TOT_CHOLE",
+        "CHANGE_RISK_RATIO": 0.0,
+        "VALUE_CURRENT": 205.0,
+        "VALUE_RECOMMENDED": 200.0,
+        "BASIS": "MODEL_IMPACT",
+        "MODEL_IMPACT": -14.14
+      }
+    ],
+    "UNCONTROLLABLE_FACTOR": [],
+    "IMPUTED_INPUTS": [],
+    "INPUT_IMPACT": null
+  },
+  "Dementia": {
+    "STATUS": "정상",
+    "REASON": null,
+    "MODEL_VERSION": "e9c583eec9a3553c",
+    "PROBABILITY": 0.002096,
+    "PROBABILITY_BY_YEAR": [
+      0.000166,
+      0.000273,
+      0.000366,
+      0.00051,
+      0.000661,
+      0.000861,
+      0.001077,
+      0.001308,
+      0.001677,
+      0.002096
+    ],
+    "STATISTIC_DIFF": 0.0003,
+    "PROBABILITY_RANK": 67.59,
+    "STATISTIC_RATIO": 0.989,
+    "DS_AGE": 52.4,
+    "RISK_INDEX": 4,
+    "CONTROLLABLE_FACTOR": [
+      {
+        "RANK": 1,
+        "FACTOR_NAME": "SMOKING",
+        "CHANGE_RISK_RATIO": 0.0,
+        "VALUE_CURRENT": 4.0,
+        "VALUE_RECOMMENDED": null,
+        "BASIS": "MODEL_IMPACT",
+        "MODEL_IMPACT": 2.67
+      },
+      {
+        "RANK": 2,
+        "FACTOR_NAME": "TOT_CHOLE",
+        "CHANGE_RISK_RATIO": 0.0,
+        "VALUE_CURRENT": 205.0,
+        "VALUE_RECOMMENDED": 200.0,
+        "BASIS": "MODEL_IMPACT",
+        "MODEL_IMPACT": 1.77
+      },
+      {
+        "RANK": 3,
+        "FACTOR_NAME": "BLDS",
+        "CHANGE_RISK_RATIO": 0.0,
+        "VALUE_CURRENT": 98.0,
+        "VALUE_RECOMMENDED": 100.0,
+        "BASIS": "MODEL_IMPACT",
+        "MODEL_IMPACT": 1.66
+      }
+    ],
+    "UNCONTROLLABLE_FACTOR": [],
+    "IMPUTED_INPUTS": [],
+    "INPUT_IMPACT": null
+  },
+  "HEALTH_AGE": 53.8,
+  "LIFE_EXPECTANCY": 29.1,
+  "LIFE_SPAN": 81.1,
+  "HEALTH_AGE_INFO": {
+    "STATUS": "정상",
+    "REASON": null,
+    "IMPUTED": null,
+    "INPUT_IMPACT": null,
+    "AVG_LIFE_SPAN": 82.7,
+    "MODEL_VERSION": "v3.3-ha33-92c00b82d662b4a6"
+  }
+}

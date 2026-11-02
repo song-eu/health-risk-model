@@ -1,0 +1,2 @@
+# 배포 파일은 바이트 그대로 받는다(줄바꿈 변환 금지) — MANIFEST.sha256 해시와 MODEL_VERSION 이 파일 바이트로 정해진다
+* -text
