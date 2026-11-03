@@ -36,7 +36,7 @@
       {
         "RANK": 1,
         "FACTOR_NAME": "SMOKING",
-        "CHANGE_RISK_RATIO": 7.65,
+        "CHANGE_RISK_RATIO": 7.67,
         "VALUE_CURRENT": 4.0,
         "VALUE_RECOMMENDED": null,
         "BASIS": "RISK_CHANGE"
@@ -44,7 +44,7 @@
       {
         "RANK": 2,
         "FACTOR_NAME": "BP_HIGH",
-        "CHANGE_RISK_RATIO": 4.31,
+        "CHANGE_RISK_RATIO": 4.3,
         "VALUE_CURRENT": 128.0,
         "VALUE_RECOMMENDED": 120.0,
         "BASIS": "RISK_CHANGE"
@@ -52,7 +52,7 @@
       {
         "RANK": 3,
         "FACTOR_NAME": "DRINKING",
-        "CHANGE_RISK_RATIO": 3.59,
+        "CHANGE_RISK_RATIO": 3.63,
         "VALUE_CURRENT": 2.0,
         "VALUE_RECOMMENDED": null,
         "BASIS": "RISK_CHANGE"
@@ -104,7 +104,7 @@
       {
         "RANK": 3,
         "FACTOR_NAME": "BP_HIGH",
-        "CHANGE_RISK_RATIO": 2.11,
+        "CHANGE_RISK_RATIO": 2.08,
         "VALUE_CURRENT": 128.0,
         "VALUE_RECOMMENDED": 120.0,
         "BASIS": "RISK_CHANGE"
@@ -118,22 +118,22 @@
     "STATUS": "정상",
     "REASON": null,
     "MODEL_VERSION": "d230ca14f8ecb065",
-    "PROBABILITY": 0.000232,
+    "PROBABILITY": 0.0002,
     "PROBABILITY_BY_YEAR": [
       0.0,
-      1e-06,
-      2.1e-05,
-      5.1e-05,
-      0.000102,
-      0.000118,
-      0.000134,
-      0.000149,
-      0.000188,
-      0.000232
+      0.0,
+      0.0,
+      0.0001,
+      0.0001,
+      0.0001,
+      0.0001,
+      0.0001,
+      0.0002,
+      0.0002
     ],
-    "STATISTIC_DIFF": -0.0006,
-    "PROBABILITY_RANK": 59.6,
-    "STATISTIC_RATIO": 0.753,
+    "STATISTIC_DIFF": -0.0007,
+    "PROBABILITY_RANK": 51.75,
+    "STATISTIC_RATIO": 0.649,
     "DS_AGE": 19.0,
     "RISK_INDEX": 3,
     "CONTROLLABLE_FACTOR": [
@@ -203,7 +203,7 @@
       {
         "RANK": 2,
         "FACTOR_NAME": "BMI",
-        "CHANGE_RISK_RATIO": 10.0,
+        "CHANGE_RISK_RATIO": 10.11,
         "VALUE_CURRENT": 24.1,
         "VALUE_RECOMMENDED": 23.0,
         "BASIS": "RISK_CHANGE"
@@ -248,7 +248,7 @@
       {
         "RANK": 1,
         "FACTOR_NAME": "BP_HIGH",
-        "CHANGE_RISK_RATIO": 18.73,
+        "CHANGE_RISK_RATIO": 18.74,
         "VALUE_CURRENT": 128.0,
         "VALUE_RECOMMENDED": 120.0,
         "BASIS": "RISK_CHANGE"
@@ -256,7 +256,7 @@
       {
         "RANK": 2,
         "FACTOR_NAME": "BMI",
-        "CHANGE_RISK_RATIO": 2.34,
+        "CHANGE_RISK_RATIO": 2.36,
         "VALUE_CURRENT": 24.1,
         "VALUE_RECOMMENDED": 23.0,
         "BASIS": "RISK_CHANGE"
@@ -299,14 +299,6 @@
     "CONTROLLABLE_FACTOR": [
       {
         "RANK": 1,
-        "FACTOR_NAME": "SMOKING",
-        "CHANGE_RISK_RATIO": 11.4,
-        "VALUE_CURRENT": 4.0,
-        "VALUE_RECOMMENDED": null,
-        "BASIS": "RISK_CHANGE"
-      },
-      {
-        "RANK": 2,
         "FACTOR_NAME": "DRINKING",
         "CHANGE_RISK_RATIO": 11.4,
         "VALUE_CURRENT": 2.0,
@@ -314,9 +306,17 @@
         "BASIS": "RISK_CHANGE"
       },
       {
+        "RANK": 2,
+        "FACTOR_NAME": "SMOKING",
+        "CHANGE_RISK_RATIO": 11.39,
+        "VALUE_CURRENT": 4.0,
+        "VALUE_RECOMMENDED": null,
+        "BASIS": "RISK_CHANGE"
+      },
+      {
         "RANK": 3,
         "FACTOR_NAME": "TOT_CHOLE",
-        "CHANGE_RISK_RATIO": 3.19,
+        "CHANGE_RISK_RATIO": 3.2,
         "VALUE_CURRENT": 205.0,
         "VALUE_RECOMMENDED": 200.0,
         "BASIS": "RISK_CHANGE"
@@ -352,7 +352,7 @@
       {
         "RANK": 1,
         "FACTOR_NAME": "SMOKING",
-        "CHANGE_RISK_RATIO": 25.0,
+        "CHANGE_RISK_RATIO": 24.7,
         "VALUE_CURRENT": 4.0,
         "VALUE_RECOMMENDED": null,
         "BASIS": "RISK_CHANGE"
@@ -360,7 +360,7 @@
       {
         "RANK": 2,
         "FACTOR_NAME": "TOT_CHOLE",
-        "CHANGE_RISK_RATIO": 1.47,
+        "CHANGE_RISK_RATIO": 1.51,
         "VALUE_CURRENT": 205.0,
         "VALUE_RECOMMENDED": 200.0,
         "BASIS": "RISK_CHANGE"
@@ -383,29 +383,29 @@
     "STATUS": "정상",
     "REASON": null,
     "MODEL_VERSION": "8ddc14350eef3fc0",
-    "PROBABILITY": 0.00196,
+    "PROBABILITY": 0.002,
     "PROBABILITY_BY_YEAR": [
-      1e-05,
+      0.0,
       0.0001,
-      0.00035,
-      0.00047,
+      0.0003,
+      0.0005,
       0.0006,
-      0.00075,
-      0.00092,
-      0.00108,
-      0.00148,
-      0.00196
+      0.0008,
+      0.0009,
+      0.0011,
+      0.0015,
+      0.002
     ],
     "STATISTIC_DIFF": -0.0018,
-    "PROBABILITY_RANK": 62.4,
-    "STATISTIC_RATIO": 0.989,
-    "DS_AGE": 52.3,
+    "PROBABILITY_RANK": 63.17,
+    "STATISTIC_RATIO": 1.009,
+    "DS_AGE": 52.6,
     "RISK_INDEX": 4,
     "CONTROLLABLE_FACTOR": [
       {
         "RANK": 1,
         "FACTOR_NAME": "BMI",
-        "CHANGE_RISK_RATIO": 27.55,
+        "CHANGE_RISK_RATIO": 27.59,
         "VALUE_CURRENT": 24.1,
         "VALUE_RECOMMENDED": 23.0,
         "BASIS": "RISK_CHANGE"
@@ -440,29 +440,29 @@
     "STATUS": "정상",
     "REASON": null,
     "MODEL_VERSION": "ffdd5af46a508113",
-    "PROBABILITY": 0.00968,
+    "PROBABILITY": 0.0097,
     "PROBABILITY_BY_YEAR": [
-      0.00014,
-      0.00066,
-      0.00166,
-      0.00245,
-      0.00331,
+      0.0001,
+      0.0007,
+      0.0017,
+      0.0024,
+      0.0033,
       0.0043,
-      0.00536,
-      0.00649,
-      0.00802,
-      0.00968
+      0.0054,
+      0.0065,
+      0.008,
+      0.0097
     ],
     "STATISTIC_DIFF": 0.0043,
-    "PROBABILITY_RANK": 98.82,
-    "STATISTIC_RATIO": 2.186,
+    "PROBABILITY_RANK": 98.86,
+    "STATISTIC_RATIO": 2.191,
     "DS_AGE": 58.2,
     "RISK_INDEX": 5,
     "CONTROLLABLE_FACTOR": [
       {
         "RANK": 1,
         "FACTOR_NAME": "SMOKING",
-        "CHANGE_RISK_RATIO": 50.83,
+        "CHANGE_RISK_RATIO": 50.86,
         "VALUE_CURRENT": 4.0,
         "VALUE_RECOMMENDED": null,
         "BASIS": "RISK_CHANGE"
@@ -494,21 +494,21 @@
     "STATUS": "정상",
     "REASON": null,
     "MODEL_VERSION": "d325a05d1058894c",
-    "PROBABILITY": 0.008298,
+    "PROBABILITY": 0.0083,
     "PROBABILITY_BY_YEAR": [
-      0.000672,
-      0.001343,
-      0.002014,
-      0.002708,
-      0.003406,
-      0.004233,
-      0.005087,
-      0.005963,
+      0.0007,
+      0.0013,
+      0.002,
+      0.0027,
+      0.0034,
+      0.0042,
+      0.0051,
+      0.006,
       0.0071,
-      0.008298
+      0.0083
     ],
     "STATISTIC_DIFF": 0.0001,
-    "PROBABILITY_RANK": 57.81,
+    "PROBABILITY_RANK": 57.82,
     "STATISTIC_RATIO": 1.077,
     "DS_AGE": 53.8,
     "RISK_INDEX": 3,
@@ -516,7 +516,7 @@
       {
         "RANK": 1,
         "FACTOR_NAME": "DRINKING",
-        "CHANGE_RISK_RATIO": 4.75,
+        "CHANGE_RISK_RATIO": 4.74,
         "VALUE_CURRENT": 2.0,
         "VALUE_RECOMMENDED": null,
         "BASIS": "RISK_CHANGE"
@@ -547,29 +547,29 @@
     "STATUS": "정상",
     "REASON": null,
     "MODEL_VERSION": "e9230b06c61308ac",
-    "PROBABILITY": 0.00083,
+    "PROBABILITY": 0.0008,
     "PROBABILITY_BY_YEAR": [
       0.0,
-      4e-05,
-      0.00016,
-      0.00019,
-      0.00023,
-      0.00029,
-      0.00035,
-      0.00042,
+      0.0,
+      0.0002,
+      0.0002,
+      0.0002,
+      0.0003,
+      0.0004,
+      0.0004,
       0.0006,
-      0.00083
+      0.0008
     ],
-    "STATISTIC_DIFF": -0.0006,
-    "PROBABILITY_RANK": 23.5,
-    "STATISTIC_RATIO": 0.821,
-    "DS_AGE": 49.4,
+    "STATISTIC_DIFF": -0.0007,
+    "PROBABILITY_RANK": 22.0,
+    "STATISTIC_RATIO": 0.791,
+    "DS_AGE": 48.9,
     "RISK_INDEX": 2,
     "CONTROLLABLE_FACTOR": [
       {
         "RANK": 1,
         "FACTOR_NAME": "BMI",
-        "CHANGE_RISK_RATIO": 1.2,
+        "CHANGE_RISK_RATIO": 1.45,
         "VALUE_CURRENT": 24.1,
         "VALUE_RECOMMENDED": 23.0,
         "BASIS": "RISK_CHANGE"
@@ -601,23 +601,23 @@
     "STATUS": "정상",
     "REASON": null,
     "MODEL_VERSION": "78abf393921cd041",
-    "PROBABILITY": 0.003436,
+    "PROBABILITY": 0.0034,
     "PROBABILITY_BY_YEAR": [
-      9e-06,
-      7.3e-05,
-      0.000245,
-      0.00046,
-      0.000749,
-      0.001135,
-      0.001613,
-      0.002186,
-      0.002776,
-      0.003436
+      0.0,
+      0.0001,
+      0.0002,
+      0.0005,
+      0.0007,
+      0.0011,
+      0.0016,
+      0.0022,
+      0.0028,
+      0.0034
     ],
     "STATISTIC_DIFF": -0.0014,
-    "PROBABILITY_RANK": 10.36,
-    "STATISTIC_RATIO": 0.769,
-    "DS_AGE": 50.5,
+    "PROBABILITY_RANK": 10.0,
+    "STATISTIC_RATIO": 0.761,
+    "DS_AGE": 50.4,
     "RISK_INDEX": 1,
     "CONTROLLABLE_FACTOR": [
       {
@@ -672,29 +672,29 @@
     "STATUS": "정상",
     "REASON": null,
     "MODEL_VERSION": "38a9b90715b85a48",
-    "PROBABILITY": 0.004011,
+    "PROBABILITY": 0.004,
     "PROBABILITY_BY_YEAR": [
-      0.000304,
-      0.000608,
-      0.000912,
-      0.001378,
-      0.001898,
-      0.002282,
-      0.002667,
-      0.003052,
-      0.003526,
-      0.004011
+      0.0003,
+      0.0006,
+      0.0009,
+      0.0014,
+      0.0019,
+      0.0023,
+      0.0027,
+      0.0031,
+      0.0035,
+      0.004
     ],
     "STATISTIC_DIFF": -0.0007,
-    "PROBABILITY_RANK": 22.55,
-    "STATISTIC_RATIO": 0.944,
+    "PROBABILITY_RANK": 22.5,
+    "STATISTIC_RATIO": 0.942,
     "DS_AGE": 28.1,
     "RISK_INDEX": 2,
     "CONTROLLABLE_FACTOR": [
       {
         "RANK": 1,
         "FACTOR_NAME": "BMI",
-        "CHANGE_RISK_RATIO": 5.58,
+        "CHANGE_RISK_RATIO": 5.6,
         "VALUE_CURRENT": 24.1,
         "VALUE_RECOMMENDED": 23.0,
         "BASIS": "RISK_CHANGE"
@@ -763,7 +763,7 @@
       {
         "RANK": 1,
         "FACTOR_NAME": "SMOKING",
-        "CHANGE_RISK_RATIO": 9.09,
+        "CHANGE_RISK_RATIO": 9.95,
         "VALUE_CURRENT": 4.0,
         "VALUE_RECOMMENDED": null,
         "BASIS": "RISK_CHANGE"
@@ -795,22 +795,22 @@
     "STATUS": "정상",
     "REASON": null,
     "MODEL_VERSION": "e9c583eec9a3553c",
-    "PROBABILITY": 0.002096,
+    "PROBABILITY": 0.0021,
     "PROBABILITY_BY_YEAR": [
-      0.000166,
-      0.000273,
-      0.000366,
-      0.00051,
-      0.000661,
-      0.000861,
-      0.001077,
-      0.001308,
-      0.001677,
-      0.002096
+      0.0002,
+      0.0003,
+      0.0004,
+      0.0005,
+      0.0007,
+      0.0009,
+      0.0011,
+      0.0013,
+      0.0017,
+      0.0021
     ],
     "STATISTIC_DIFF": 0.0003,
-    "PROBABILITY_RANK": 67.59,
-    "STATISTIC_RATIO": 0.989,
+    "PROBABILITY_RANK": 67.77,
+    "STATISTIC_RATIO": 0.991,
     "DS_AGE": 52.4,
     "RISK_INDEX": 4,
     "CONTROLLABLE_FACTOR": [

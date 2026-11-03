@@ -14,8 +14,8 @@ from scipy import stats
 HERE = os.path.dirname(os.path.abspath(__file__))
 DEPLOY = os.environ.get('DEPLOY_DIR', os.path.join(os.getcwd(), 'deploy'))
 H = [1, 3, 5, 8, 10]; OUT_H = [1, 5, 10]
-DIGITS = 4   # 위험 출력 소수 자릿수(0.0001 = 0.01%p). 드문 암의 작은 위험이 0 으로 뭉치지 않게
-DIGITS_BY = {'lca33': 5, 'luc33': 5, 'pac33': 5, 'pro33': 6, 'crc33': 6, 'utc33': 6, 'esr33': 6, 'dmn33': 6, 'brc33': 6, 'thy33': 6}   # 간암은 4자리면 가상 입력의 8.9% 가 0.0001 로 뭉친다. 5자리 1.3%. 폐암 9.2% → 1.2%. 췌장암 8.4%. 전립선암 4자리 19.3%·5자리 7.4%(젊은 남성 위험 ≈ 0) → 6자리
+DIGITS = 4   # 위험 출력 소수 자릿수: 비율 4자리 = 퍼센트 소수 2자리(0.1476 = 14.76%). 모든 질환 같음(삼성 확정 11/02 — 예전엔 드문 암 5·6자리)
+DIGITS_BY = {}   # 질환별 예외 없음. 드문 암의 작은 위험은 0.0000·0.0001 로 뭉칠 수 있다(0.01% 미만 = 0)
 GRID_X = np.round(np.arange(-14, 14.0001, 0.05), 4)
 BANDS = ['19-29', '30-39', '40-49', '50-59', '60-69', '70+']
 HX_OTHERS = ['hx_cancer', 'hx_gi', 'hx_liver', 'hx_gallbladder', 'hx_kidney', 'hx_bronchial', 'hx_thyroid', 'hx_bleeding',

@@ -103,7 +103,7 @@ node tests/test_engine.js       # 시험 페이지 엔진 = Python API
 |---|---|
 | STATUS · REASON · MODEL_VERSION | 정상 / 예측 대상 아님 / 입력 오류, 사유, 모델 해시(sha256 앞 16자리) |
 | IMPUTED_INPUTS · INPUT_IMPACT | 채워서 계산한 입력(정의서 코드 목록, 없으면 `[]`), 그 영향도 상·중·하(없으면 null). 입력 코드·빈칸 처리 전체는 `INPUT_API.md` |
-| PROBABILITY · PROBABILITY_BY_YEAR | 10년 위험(0–1), 1~10년차 위험 |
+| PROBABILITY · PROBABILITY_BY_YEAR | 10년 위험(0–1), 1~10년차 위험. 모든 질환 소수 4자리 반올림 = 퍼센트 소수 2자리(0.1476 = 14.76%, 0.01% 미만은 0). TOP3 변화율은 반올림 전 위험으로 계산 |
 | STATISTIC_DIFF · PROBABILITY_RANK · RISK_INDEX | 같은 성·5세 연령대 평균과의 차, 백분위(0–100), 백분위 5등분(1–5) |
 | STATISTIC_RATIO · DS_AGE | 같은 성·연령대 정상군 평균 대비 배수, 정상군 평균 위험이 이 사람 위험과 같아지는 나이 |
 | CONTROLLABLE_FACTOR · UNCONTROLLABLE_FACTOR | 권장값으로 바꾸거나(조절 가능) 가족력·과거력이 없었다면(조절 불가) 10년 위험이 줄어드는 비율(%). 조절 가능은 TOP3 — 검진값이 하나라도 있으면 항상 3개(검진값이 모두 빈칸이면 3개가 안 될 수 있음): 권장값보다 나쁜 인자(`BASIS` = `RISK_CHANGE`)가 3개 미만이면 입력한 값이 모델 위험에 준 영향(`BASIS` = `MODEL_IMPACT`, `MODEL_IMPACT` = 그 값을 빈칸으로 두고 같은 성·연령대 대표값으로 채웠을 때 대비 위험 차이 %, 양수 = 지금 값이 위험을 높임, `CHANGE_RISK_RATIO` = 0)이 큰 인자로 채웁니다(영향은 반올림 전 위험으로 계산, 0.01% 미만은 유효숫자 2자리로 표시, 그래도 모자라면 입력한 관리 항목을 영향 0 으로) — 위험을 높이는 인자가 먼저 |

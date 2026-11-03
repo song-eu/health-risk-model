@@ -201,6 +201,7 @@ def _factors(M, X, base):
     feats = set(M.feats) | set(M.qm['features'] if M.qm else [])
     ctrl = [[] for _ in range(len(X))]; unc = [[] for _ in range(len(X))]
     ok = pd.notna(base)
+    b0 = M.predict_df(X, raw=True).get('risk_10y_raw', pd.Series(np.nan, index=X.index)).values   # 11/02: 변화율은 반올림 전 위험으로(출력 4자리에서 작은 위험이 0·0.0001 로 뭉쳐 비율이 틀어지지 않게)
     for var, name, rec, how in CTRL:
         if var not in feats or var not in X: continue
         if M.dis in CTRL_ALLOW and name not in CTRL_ALLOW[M.dis]: continue
@@ -212,18 +213,18 @@ def _factors(M, X, base):
         else: bad = v == 1; X2[var] = np.where(bad, 0.0, v)
         bad = bad & ok & ~np.isnan(v)
         if not bad.any(): continue
-        r2 = M.predict_df(X2)['risk_10y'].values
+        r2 = M.predict_df(X2, raw=True)['risk_10y_raw'].values
         for i in np.where(bad)[0]:
-            ch = (base[i] - r2[i]) / base[i] * 100
+            ch = (b0[i] - r2[i]) / b0[i] * 100
             if ch > 0: ctrl[i].append(dict(FACTOR_NAME=name, CHANGE_RISK_RATIO=round(float(ch), 2), VALUE_CURRENT=None, VALUE_RECOMMENDED=None if rec is None else float(tgt[i]), _var=var))
     for var, name in UNCTRL:
         if var not in feats or var not in X: continue
         if M.dis in UNCTRL_ALLOW and name not in UNCTRL_ALLOW[M.dis]: continue
         v = X[var].values.astype(float); bad = (v == 1) & ok
         if not bad.any(): continue
-        r2 = M.predict_df(X.assign(**{var: np.where(bad, 0.0, v)}))['risk_10y'].values
+        r2 = M.predict_df(X.assign(**{var: np.where(bad, 0.0, v)}), raw=True)['risk_10y_raw'].values
         for i in np.where(bad)[0]:
-            ch = (base[i] - r2[i]) / base[i] * 100
+            ch = (b0[i] - r2[i]) / b0[i] * 100
             if ch > 0: unc[i].append(dict(FACTOR_NAME=name, CHANGE_RISK_RATIO=round(float(ch), 2), VALUE_CURRENT=1, _var=var))
     for L in ctrl + unc: L.sort(key=lambda d: -d['CHANGE_RISK_RATIO'])
     for L in ctrl:
