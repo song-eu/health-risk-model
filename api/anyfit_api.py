@@ -265,11 +265,11 @@ def predict_anyfit(records, diseases=None, deploy_dir=None):
     X = X.drop(columns=['input_flags', 'alc_days_week'])   # 갑년·주 알코올 g 는 모델 입력으로 넘긴다(쓰는 모델은 q_module derived 가 있는 질환만 — 폐암 갑년)
     for dis in dises:
         M = Model(dis, deploy_dir); ref = Reference(os.path.join(deploy_dir or DEPLOY, dis, 'reference.json'))
-        O = M.predict_df(X); base = O['risk_10y'].values
+        O = M.predict_df(X, raw=True); base = O['risk_10y'].values; braw = O.get('risk_10y_raw', pd.Series(np.nan, index=O.index)).values   # 백분위·등급·차이·비율·질병나이는 반올림 전 위험으로(4자리 반올림으로 작은 위험이 0 이 되어 1등급으로 뭉치지 않게)
         Xn = X.copy(); Xn = Xn.where(pd.notna(Xn), np.nan)
         ctrl, unc = _factors(M, Xn, base)
         for i in range(len(X)):
-            r = base[i]; st = ref.stats(r, X.sex.iat[i], X.age_at_index.iat[i]) if pd.notna(r) else ref.stats(np.nan, 0, 0)
+            r = braw[i]; st = ref.stats(r, X.sex.iat[i], X.age_at_index.iat[i]) if pd.notna(r) else ref.stats(np.nan, 0, 0)
             def fmt(L):
                 res = []
                 for k, d in enumerate(L, 1):
@@ -282,7 +282,7 @@ def predict_anyfit(records, diseases=None, deploy_dir=None):
                                     **{k: d[k] for k in ('BASIS', 'MODEL_IMPACT') if k in d}))
                 return res
             out[i][DIS_OUT[dis]] = dict(STATUS=O.status.iat[i], REASON=O.reason.iat[i] or None, MODEL_VERSION=M.version,
-                                        PROBABILITY=None if pd.isna(r) else float(r), PROBABILITY_BY_YEAR=O.risk_by_year.iat[i], **st,
+                                        PROBABILITY=None if pd.isna(base[i]) else float(base[i]), PROBABILITY_BY_YEAR=O.risk_by_year.iat[i], **st,
                                         CONTROLLABLE_FACTOR=fmt(ctrl[i]), UNCONTROLLABLE_FACTOR=fmt(unc[i]),
                                         IMPUTED_INPUTS=[IMP_CODE.get(k, k) for k in O.imputed.iat[i]], INPUT_IMPACT=O.input_impact.iat[i] or None)
     if os.path.exists(os.path.join(deploy_dir or DEPLOY, 'ha33', 'meta.json')):   # 건강나이·기대여명 — 필드 정의는 삼성 확인 필요

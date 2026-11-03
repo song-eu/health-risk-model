@@ -644,7 +644,7 @@ footer { max-width: 1240px; margin: 0 auto; padding: 0 16px 30px; color: var(--m
       for (const [dis, name] of DIS_OUT) {
         const M = models[dis]; if (!M) continue;
         const O = M.predict(X), r = O.risk_10y;
-        const st = refStats(refs[dis], r, X.sex, X.age_at_index);
+        const st = refStats(refs[dis], O.risk_10y_raw, X.sex, X.age_at_index);   // 백분위·등급은 반올림 전 위험으로(Python 과 같음)
         const [ctrl, unc] = factors(M, X, r);
         const fmt = L => L.map((d, k) => {
           let val = null;
