@@ -5,9 +5,9 @@
 # 정의서 시트 "검진기반-input"·"문진기반-input" 의 엔진 입력 코드를 받고, "output(문진검진 동일)" 의 질병별 항목을 낸다. 지금 개발된 모델만 낸다(비만은 정의서 출력에 없음).
 # 정의서에 값 정의가 없는 항목은 아래 가정으로 계산한다(삼성·온택트와 확정 필요):
 #   PROBABILITY = 10년 위험(0–1). PROBABILITY_BY_YEAR = 1~10년차(그래프). STATISTIC_DIFF = 위험 − 같은 성·5세 연령대 평균.
-#   PROBABILITY_RANK = 같은 성·5세 연령대 안 백분위(0–100, 클수록 위험). RISK_INDEX = 백분위 5등분(1–5).
+#   PROBABILITY_RANK = 같은 성·5세 연령대 안 백분위(0–100, 클수록 위험). RISK_INDEX = 모델별 10년 위험 경계(reference.json grade_cutoffs)로 나눈 등급(1–5).
 #   STATISTIC_RATIO = 위험 / 같은 성·5세 연령대 정상군 평균. DS_AGE = 정상군 평균 위험이 이 사람 위험과 같아지는 나이(19–90).
-#   기준 인구 = 검진 자료(deploy/<질환>/reference.json, 집계만).
+#   기준 인구 = 검진 자료(deploy/<질환>/reference.json, 집계만). 흡연·음주·가족력은 성·연령대 응답 비율로 섞어 계산했다.
 #   CONTROLLABLE_FACTOR.CHANGE_RISK_RATIO = 그 인자를 권장값으로 바꿀 때 10년 위험이 줄어드는 비율(%). 입력했고 권장값보다 나쁜 인자만, 큰 순서.
 #   UNCONTROLLABLE_FACTOR.CHANGE_RISK_RATIO = 가족력·과거력이 없었다면 줄어드는 비율(%). 나이·성별은 넣지 않는다.
 #   CONTROLLABLE_FACTOR 는 정확히 3개(TOP3, 모델 입력이 모자라면 그 수만큼): 권장값으로 바꾸면 위험이 주는 인자가 많으면 큰 순서로 3개. 권장값으로 바꾸면 위험이 주는 인자(BASIS = RISK_CHANGE)가 3개 미만이면, 입력한 값이 모델 위험에 영향을 준 인자(BASIS = MODEL_IMPACT,
@@ -190,8 +190,10 @@ class Reference:
         if len(na) >= 2:
             ages = np.array([x[0] for x in na], float); m = np.maximum.accumulate(np.array([x[1] for x in na], float)) + np.arange(len(na)) * 1e-9
             ds = round(float(np.clip(np.interp(r, m, ages, left=19, right=90), 19, 90)), 1)
+        cut = self.R.get('grade_cutoffs')   # 등급 = 모델별 절대 10년 위험 경계(4개 → 1–5등급, 반올림 전 위험으로). 경계가 없으면 예전 방식(백분위 5등분)
+        ri = 1 + sum(r >= x for x in cut) if cut else int(min(5, rank // 20 + 1))
         return dict(STATISTIC_DIFF=round(float(r - c['mean']), 4), PROBABILITY_RANK=round(rank, 2), STATISTIC_RATIO=round(float(r / nm), 3) if nm and nm > 0 else None,
-                    DS_AGE=ds, RISK_INDEX=int(min(5, rank // 20 + 1)))
+                    DS_AGE=ds, RISK_INDEX=int(ri))
 
 def _imp(x):   # MODEL_IMPACT 표시: 0.01% 이상은 소수 2자리, 그보다 작으면 유효숫자 2자리(0 으로 보이지 않게)
     return round(x, 2) if abs(x) >= 0.01 else float(f'{x:.2g}')

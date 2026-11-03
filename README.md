@@ -38,7 +38,7 @@ C·O/E 는 사람 단위 5겹 교차검증 10년 값입니다. ¹대사질환 4�
 
 | 경로 | 내용 |
 |---|---|
-| `deploy/<코드>/` | 모델 묶음: `model.json`(XGBoost), `calibration.json`(보정표), `meta.json`(입력 변수·대치·국가 목표 이동·문진 모듈), `reference.json`(기준 인구 집계: 검진 코호트의 성·5세 연령대별 위험 분포, 30명 이상 칸만), `fill.json`(빈칸 채움표: 성·연령대 중앙값·회귀식, 항목별 채움 방법과 영향도), `MANIFEST.json`(sha256). Cox 모델은 `meta.json` 에 계수가 있다 |
+| `deploy/<코드>/` | 모델 묶음: `model.json`(XGBoost), `calibration.json`(보정표), `meta.json`(입력 변수·대치·국가 목표 이동·문진 모듈), `reference.json`(기준 인구 집계: 검진 코호트의 성·5세 연령대별 위험 분포, 30명 이상 칸만. 흡연·음주·가족력은 성·연령대 응답 비율로 섞어 계산. 등급 경계 `grade_cutoffs`), `fill.json`(빈칸 채움표: 성·연령대 중앙값·회귀식, 항목별 채움 방법과 영향도), `MANIFEST.json`(sha256). Cox 모델은 `meta.json` 에 계수가 있다 |
 | `deploy/ha33/` | 건강나이 `health_age.json`·`meta.json` |
 | `api/` | Python 엔진 `deploy_api.py`, 항목정의서 형식 `anyfit_api.py`, 건강나이 `health_age_api.py` |
 | `web/risk_test.html` | 시험 페이지(모델 JSON 전부 포함, 서버·인터넷 없이 열림) |
@@ -104,9 +104,11 @@ node tests/test_engine.js       # 시험 페이지 엔진 = Python API
 | STATUS · REASON · MODEL_VERSION | 정상 / 예측 대상 아님 / 입력 오류, 사유, 모델 해시(sha256 앞 16자리) |
 | IMPUTED_INPUTS · INPUT_IMPACT | 채워서 계산한 입력(정의서 코드 목록, 없으면 `[]`), 그 영향도 상·중·하(없으면 null). 입력 코드·빈칸 처리 전체는 `INPUT_API.md` |
 | PROBABILITY · PROBABILITY_BY_YEAR | 10년 위험(0–1), 1~10년차 위험. 모든 질환 소수 4자리 반올림 = 퍼센트 소수 2자리(0.1476 = 14.76%, 0.01% 미만은 0). TOP3 변화율은 반올림 전 위험으로 계산 |
-| STATISTIC_DIFF · PROBABILITY_RANK · RISK_INDEX | 같은 성·5세 연령대 평균과의 차, 백분위(0–100), 백분위 5등분(1–5). 모두 반올림 전 위험으로 계산하고 출력할 때만 반올림한다(아주 작은 위험은 0.00% 로 보여도 백분위·등급은 실제 순서대로) |
+| STATISTIC_DIFF · PROBABILITY_RANK · RISK_INDEX | 같은 성·5세 연령대 평균과의 차, 백분위(0–100), 위험 등급(1–5: 모델별 10년 위험 경계, `deploy/<코드>/reference.json` 의 `grade_cutoffs`). 모두 반올림 전 위험으로 계산하고 출력할 때만 반올림한다(아주 작은 위험은 0.00% 로 보여도 백분위·등급은 실제 순서대로) |
 | STATISTIC_RATIO · DS_AGE | 같은 성·연령대 정상군 평균 대비 배수, 정상군 평균 위험이 이 사람 위험과 같아지는 나이 |
 | CONTROLLABLE_FACTOR · UNCONTROLLABLE_FACTOR | 권장값으로 바꾸거나(조절 가능) 가족력·과거력이 없었다면(조절 불가) 10년 위험이 줄어드는 비율(%). 조절 가능은 TOP3 — 검진값이 하나라도 있으면 항상 3개(검진값이 모두 빈칸이면 3개가 안 될 수 있음): 권장값보다 나쁜 인자(`BASIS` = `RISK_CHANGE`)가 3개 미만이면 입력한 값이 모델 위험에 준 영향(`BASIS` = `MODEL_IMPACT`, `MODEL_IMPACT` = 그 값을 빈칸으로 두고 같은 성·연령대 대표값으로 채웠을 때 대비 위험 차이 %, 양수 = 지금 값이 위험을 높임, `CHANGE_RISK_RATIO` = 0)이 큰 인자로 채웁니다(영향은 반올림 전 위험으로 계산, 0.01% 미만은 유효숫자 2자리로 표시, 그래도 모자라면 입력한 관리 항목을 영향 0 으로) — 위험을 높이는 인자가 먼저 |
+
+위험 등급(RISK_INDEX) 경계 — 10년 위험(%)이 경계 이상이면 한 등급씩 올라간다(경계 4개 → 1–5등급). 경계는 모델마다 기준 인구 전체(성·연령 구분 없음)의 40·70·90·97 백분위를 읽기 좋은 수로 정했다(기준 인구에서 1–5등급이 약 40·30·20·7·3%). 나이와 상관없이 같은 위험이면 같은 등급이다.
 
 건강나이: HEALTH_AGE, LIFE_EXPECTANCY(건강나이의 남은 기대여명, 2024 완전생명표), LIFE_SPAN(기대수명 = 실제 나이 + 건강나이의 남은 기대여명. 건강나이가 실제 나이보다 높으면 같은 성·나이 평균 기대수명(AVG_LIFE_SPAN)보다 짧고, 낮으면 깁니다), HEALTH_AGE_INFO(상태·채운 항목 IMPUTED·영향도 INPUT_IMPACT·같은 성·나이 평균 기대수명). 건강나이도 나이·성별 말고는 빈칸을 채워 계산하고(`deploy/ha33/fill.json`), 나이·성별 빈칸은 "입력 오류"입니다. 영향도는 그 항목을 비웠을 때 건강나이가 2세 이상 바뀌는 사람 비율로 정합니다(상 ≥5%, 중 ≥1% 또는 1세 이상 ≥10%). 공복혈당·허리·수축기혈압·혈색소·AST 가 "상"입니다. 비교 항목(STATISTIC_*·PROBABILITY_RANK·RISK_INDEX·DS_AGE)은 18개 질환 모두 기준 인구 집계로 계산합니다. DS_AGE 는 19–90 으로 자르므로, 위험이 19세 정상군 평균보다 낮으면 19 입니다.
 

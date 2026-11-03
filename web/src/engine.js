@@ -337,7 +337,7 @@
       ds = pyRound(clip(interp(r, m, ages, 19, 90), 19, 90), 1);
     }
     return { STATISTIC_DIFF: pyRound(r - c.mean, 4), PROBABILITY_RANK: pyRound(rank, 2), STATISTIC_RATIO: (nm && nm > 0) ? pyRound(r / nm, 3) : null,
-      DS_AGE: ds, RISK_INDEX: Math.trunc(Math.min(5, Math.floor(rank / 20) + 1)) };
+      DS_AGE: ds, RISK_INDEX: R.grade_cutoffs ? 1 + R.grade_cutoffs.filter(x => r >= x).length : Math.trunc(Math.min(5, Math.floor(rank / 20) + 1)) };   // 등급 = 모델별 절대 위험 경계(Python 과 같음)
   }
 
   // ---------- 스크래핑 값 정리(anyfit_api.parse_value·clean_input) ----------
