@@ -9,7 +9,7 @@
 })(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
   const H = [1, 3, 5, 8, 10], OUT_H = [1, 5, 10], DIGITS = 4;
-  const DIGITS_BY = {};   // 모든 질환 4자리(퍼센트 소수 2자리, 삼성 확정 11/02)
+  const DIGITS_BY = {};   // 모든 질환 4자리(퍼센트 소수 2자리, 삼성 확정)
   const GRID_X = Array.from({ length: 561 }, (_, i) => Math.round((-14 + 0.05 * i) * 1e4) / 1e4);
   const BANDS = ['19-29', '30-39', '40-49', '50-59', '60-69', '70+'];
   const HX_OTHERS = ['hx_cancer', 'hx_gi', 'hx_liver', 'hx_gallbladder', 'hx_kidney', 'hx_bronchial', 'hx_thyroid', 'hx_bleeding',
@@ -483,7 +483,7 @@
     function factors(M, X, base) {
       const ctrl = [], unc = [];
       if (isNaN(base)) return [ctrl, unc];
-      const b0 = M.predict(X).risk_10y_raw;   // 변화율은 반올림 전 위험으로(Python 과 같음, 11/02)
+      const b0 = M.predict(X).risk_10y_raw;   // 변화율은 반올림 전 위험으로(Python 과 같음)
       for (const [v, name, rec, how] of CTRL) {
         if (!M.featSet.has(v) || !(v in X)) continue;
         if (M.dis in CTRL_ALLOW && !CTRL_ALLOW[M.dis].includes(name)) continue;

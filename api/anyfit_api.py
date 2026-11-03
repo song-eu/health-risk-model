@@ -201,7 +201,7 @@ def _factors(M, X, base):
     feats = set(M.feats) | set(M.qm['features'] if M.qm else [])
     ctrl = [[] for _ in range(len(X))]; unc = [[] for _ in range(len(X))]
     ok = pd.notna(base)
-    b0 = M.predict_df(X, raw=True).get('risk_10y_raw', pd.Series(np.nan, index=X.index)).values   # 11/02: 변화율은 반올림 전 위험으로(출력 4자리에서 작은 위험이 0·0.0001 로 뭉쳐 비율이 틀어지지 않게)
+    b0 = M.predict_df(X, raw=True).get('risk_10y_raw', pd.Series(np.nan, index=X.index)).values   # 변화율은 반올림 전 위험으로(출력 4자리에서 작은 위험이 0·0.0001 로 뭉쳐 비율이 틀어지지 않게)
     for var, name, rec, how in CTRL:
         if var not in feats or var not in X: continue
         if M.dis in CTRL_ALLOW and name not in CTRL_ALLOW[M.dis]: continue

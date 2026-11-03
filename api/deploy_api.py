@@ -14,7 +14,7 @@ from scipy import stats
 HERE = os.path.dirname(os.path.abspath(__file__))
 DEPLOY = os.environ.get('DEPLOY_DIR', os.path.join(os.getcwd(), 'deploy'))
 H = [1, 3, 5, 8, 10]; OUT_H = [1, 5, 10]
-DIGITS = 4   # 위험 출력 소수 자릿수: 비율 4자리 = 퍼센트 소수 2자리(0.1476 = 14.76%). 모든 질환 같음(삼성 확정 11/02 — 예전엔 드문 암 5·6자리)
+DIGITS = 4   # 위험 출력 소수 자릿수: 비율 4자리 = 퍼센트 소수 2자리(0.1476 = 14.76%). 모든 질환 같음(삼성 확정 — 예전엔 드문 암 5·6자리)
 DIGITS_BY = {}   # 질환별 예외 없음. 드문 암의 작은 위험은 0.0000·0.0001 로 뭉칠 수 있다(0.01% 미만 = 0)
 GRID_X = np.round(np.arange(-14, 14.0001, 0.05), 4)
 BANDS = ['19-29', '30-39', '40-49', '50-59', '60-69', '70+']
