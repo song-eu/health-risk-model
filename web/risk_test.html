@@ -793,7 +793,7 @@ footer { max-width: 1240px; margin: 0 auto; padding: 0 16px 30px; color: var(--m
     $('cards').innerHTML = html;
   }
   const vers = Object.entries(BUNDLES).map(([k, b]) => `${k} ${b.version || (b.meta && b.meta.version) || ''}`).join(' · ');
-  $('footer').textContent = '모델 버전(sha256 앞 16자리): ' + vers + ' — build 2026-11-03';
+  $('footer').textContent = '모델 버전(sha256 앞 16자리): ' + vers + ' — engine f6ea5005';
   fillForm(EXAMPLE); run();
 })();
 </script>

@@ -1,6 +1,6 @@
 # deploy/ 의 모델 JSON 을 모두 넣은 시험 페이지 web/risk_test.html 을 만든다(표준 라이브러리만 사용)
 # usage: python web/build_html.py   (레포 최상위에서)
-import json, hashlib, os, datetime
+import json, hashlib, os
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEP, SRC = os.path.join(ROOT, 'deploy'), os.path.join(ROOT, 'web', 'src')
 
@@ -17,7 +17,8 @@ for d in sorted(os.listdir(DEP)):
 bundles = json.dumps(B, ensure_ascii=False, separators=(',', ':')).replace('</', '<\\/')
 html = open(os.path.join(SRC, 'template.html'), encoding='utf-8').read()
 html = html.replace('/*BUNDLES*/', bundles, 1).replace('/*ENGINE*/', open(os.path.join(SRC, 'engine.js'), encoding='utf-8').read(), 1)
-html = html.replace('/*BUILD*/', f'build {datetime.date.today().isoformat()}', 1)
+eng = hashlib.sha256(open(os.path.join(SRC, 'engine.js'), 'rb').read()).hexdigest()[:8]
+html = html.replace('/*BUILD*/', f'engine {eng}', 1)   # 날짜 대신 엔진 코드 해시(같은 파일이면 같은 페이지)
 out = os.path.join(ROOT, 'web', 'risk_test.html')
 open(out, 'w', encoding='utf-8', newline='\n').write(html)
 print(out, f'{os.path.getsize(out) / 1e6:.1f} MB,', len(B), 'bundles')
