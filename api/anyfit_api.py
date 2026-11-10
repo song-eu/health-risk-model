@@ -258,6 +258,132 @@ def _factors(M, X, base):
     ctrl = [L[:3] for L in ctrl]   # TOP3: 3개까지
     return ctrl, unc
 
+_MODELS = {}   # (질환, 묶음 폴더) → Model. 같은 프로세스(본 프로세스·병렬 작업 프로세스)에서 다시 읽지 않는다
+def _model(dis, deploy_dir):
+    key = (dis, deploy_dir)
+    if key not in _MODELS: _MODELS[key] = Model(dis, deploy_dir)
+    return _MODELS[key]
+
+def _disease_rows(dis, X, A, deploy_dir, one_thread=False):
+    """질환 하나의 출력(사람마다 dict). 병렬 작업 프로세스에서도 이 함수를 그대로 부른다"""
+    M = _model(dis, deploy_dir); ref = Reference(os.path.join(deploy_dir or DEPLOY, dis, 'reference.json'))
+    if one_thread and M.bst is not None: M.bst.set_param({'nthread': 1})   # 작업 프로세스끼리 CPU 를 나눠 쓰므로 XGBoost 내부 스레드는 1개
+    O = M.predict_df(X, raw=True); base = O['risk_10y'].values; braw = O.get('risk_10y_raw', pd.Series(np.nan, index=O.index)).values   # 백분위·등급·차이·비율·질병나이는 반올림 전 위험으로(4자리 반올림으로 작은 위험이 0 이 되어 1등급으로 뭉치지 않게)
+    Xn = X.copy(); Xn = Xn.where(pd.notna(Xn), np.nan)
+    ctrl, unc = _factors(M, Xn, base)
+    rows = []
+    for i in range(len(X)):
+        r = braw[i]; st = ref.stats(r, X.sex.iat[i], X.age_at_index.iat[i]) if pd.notna(r) else ref.stats(np.nan, 0, 0)
+        def fmt(L):
+            res = []
+            for k, d in enumerate(L, 1):
+                src = next((c for c in list(NUM) + list(HCHK) + list(FMLY) + list(HEP) + ['SMOKING', 'DRINKING'] if c == d['FACTOR_NAME']), None)
+                if src in NUM: val = None if pd.isna(X.at[i, NUM[src]]) else round(float(X.at[i, NUM[src]]), 2)   # 범위 점검 뒤 값(키·몸무게로 계산한 BMI 포함)
+                else: val = A.at[i, src] if src in A else None
+                res.append(dict(RANK=k, FACTOR_NAME=d['FACTOR_NAME'], CHANGE_RISK_RATIO=d['CHANGE_RISK_RATIO'],
+                                VALUE_CURRENT=None if val is None or pd.isna(val) else (float(val) if isinstance(val, (int, float, np.number)) else val),
+                                **({'VALUE_RECOMMENDED': d['VALUE_RECOMMENDED']} if 'VALUE_RECOMMENDED' in d else {}),
+                                **{k: d[k] for k in ('BASIS', 'MODEL_IMPACT') if k in d}))
+            return res
+        rows.append(dict(STATUS=O.status.iat[i], REASON=O.reason.iat[i] or None, MODEL_VERSION=M.version,
+                         PROBABILITY=None if pd.isna(base[i]) else float(base[i]), PROBABILITY_BY_YEAR=O.risk_by_year.iat[i], **st,
+                         CONTROLLABLE_FACTOR=fmt(ctrl[i]), UNCONTROLLABLE_FACTOR=fmt(unc[i]),
+                         IMPUTED_INPUTS=[IMP_CODE.get(k, k) for k in O.imputed.iat[i]], INPUT_IMPACT=O.input_impact.iat[i] or None))
+    return rows
+
+def _par_task(args):   # 작업 프로세스 진입점(모듈 최상위여야 넘길 수 있다)
+    return _disease_rows(*args, one_thread=True)
+
+# ---------- 질환별 병렬 계산 ----------
+# 질환끼리 독립이라 프로세스로 나눠 계산한다(시간의 대부분이 TOP3 다시 예측). 스레드는 pandas 가 GIL 을 잡아 거의 빨라지지 않았다.
+# 작업 수 = min(쓸 수 있는 CPU(affinity·컨테이너 할당량), 지금 놀고 있는 CPU(부하 평균), 가용 메모리 ÷ 400MB, 16). 2 미만이면 순차.
+#   16 상한: 한 요청의 질환 17개 기준. 동시 요청이 많은 서버는 ANYFIT_WORKERS=n 으로 CPU 수에 가깝게 올리면 처리량이 늘어난다(0 = 끔, tests/bench_concurrency.py · PERFORMANCE.md).
+# 병렬이 실패하면(프로세스 시작 실패·메모리 부족·작업 프로세스 종료 등) 경고만 남기고 순차로 다시 계산한다 — 결과는 같다. 모델 자체 오류는 순차에서 그대로 난다.
+# 시작 방식은 spawn: fork 는 부모가 XGBoost(OpenMP)를 쓴 뒤라 자식이 멈출 수 있다. spawn 은 원래 호출 스크립트를 작업 프로세스에서 다시 실행하므로
+#   (가드 없는 스크립트면 전체가 다시 돈다) 작업 프로세스를 띄우는 동안만 __main__ 의 경로를 가린다 — 작업 프로세스는 anyfit_api 만 읽는다.
+_POOL, _POOL_N, _POOL_OFF = None, 0, False
+import threading; _POOL_LOCK = threading.Lock()   # 동시 요청(멀티스레드 서버): 풀 만들기·작업 프로세스 띄우기는 한 번에 하나만
+_WORKER_MEM = 400 * 2 ** 20
+
+def _usable_workers(n_tasks):
+    try:
+        cap = int(os.environ.get('ANYFIT_WORKERS', '16'))
+    except ValueError:
+        cap = 16
+    if cap <= 1 or n_tasks <= 1: return 0
+    try: cpus = len(os.sched_getaffinity(0))   # 이 프로세스가 쓸 수 있는 CPU(리눅스)
+    except (AttributeError, OSError): cpus = os.cpu_count() or 1
+    try:   # 컨테이너 CPU 할당량(cgroup v2 → v1)
+        q = open('/sys/fs/cgroup/cpu.max').read().split()
+        if q[0] != 'max': cpus = min(cpus, max(1, int(int(q[0]) / int(q[1]))))
+    except (OSError, ValueError, IndexError):
+        try:
+            q, p = int(open('/sys/fs/cgroup/cpu/cpu.cfs_quota_us').read()), int(open('/sys/fs/cgroup/cpu/cpu.cfs_period_us').read())
+            if q > 0: cpus = min(cpus, max(1, q // p))
+        except (OSError, ValueError, ZeroDivisionError): pass
+    try: free = int(cpus - os.getloadavg()[0])   # 다른 일로 바쁜 CPU 는 빼고
+    except (AttributeError, OSError): free = cpus - 1   # 윈도우: 부하 평균 없음 → 하나는 남긴다
+    n = min(cap, free)   # 질환 수로 자르지 않는다: 동시 요청이 많으면 여러 요청의 질환 계산이 같은 풀에서 함께 돈다(작업 프로세스는 필요할 때만 뜬다)
+    try:   # 가용 메모리(리눅스)
+        for ln in open('/proc/meminfo'):
+            if ln.startswith('MemAvailable:'): n = min(n, int(ln.split()[1]) * 1024 // _WORKER_MEM); break
+    except (OSError, ValueError, IndexError): pass
+    return n if n >= 2 else 0
+
+def _pool(n):
+    global _POOL, _POOL_N
+    # 한 번 만든 풀은 계속 쓴다: 부하에 따라 작업 수가 늘 때마다 다시 만들면 작업 프로세스가 모델을 다시 읽어 수 초씩 늦어졌다
+    # shortcut: 풀 크기는 처음 호출 때 정해진다(그때 서버가 바빴으면 작게 유지), 문제가 되면 ANYFIT_WORKERS 로 고정하거나 재시작
+    if _POOL is not None: return _POOL
+    import multiprocessing as mp
+    from concurrent.futures import ProcessPoolExecutor
+    _POOL, _POOL_N = ProcessPoolExecutor(max_workers=n, mp_context=mp.get_context('spawn')), n
+    return _POOL
+
+def _shutdown_pool():
+    global _POOL, _POOL_N
+    if _POOL is not None:
+        try: _POOL.shutdown(wait=False, cancel_futures=True)
+        except Exception: pass
+    _POOL, _POOL_N = None, 0
+
+import atexit; atexit.register(_shutdown_pool)
+
+_ONE_THREAD = ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS')
+def _hidden_main_run(fn):
+    """작업 프로세스(spawn)를 띄우는 동안만: __main__ 의 경로·스펙을 가리고(호출 스크립트를 다시 실행하지 않게),
+    수치 라이브러리 스레드를 1개로(작업 프로세스마다 CPU 수만큼 스레드를 띄우면 서로 다퉈 병렬 이득이 거의 없었다). 끝나면 되돌림"""
+    m = sys.modules.get('__main__')
+    saved_env = {k: os.environ.get(k) for k in _ONE_THREAD}
+    for k in _ONE_THREAD: os.environ[k] = '1'   # 부모는 이미 라이브러리를 읽어서 영향 없음, 새로 뜨는 작업 프로세스만 받는다
+    saved_file, saved_spec = (m.__dict__.pop('__file__', None), getattr(m, '__spec__', None)) if m is not None else (None, None)
+    if m is not None: m.__spec__ = None
+    try: return fn()
+    finally:
+        if m is not None:
+            m.__spec__ = saved_spec
+            if saved_file is not None: m.__file__ = saved_file
+        for k, v in saved_env.items():
+            if v is None: os.environ.pop(k, None)
+            else: os.environ[k] = v
+
+def _all_disease_rows(dises, X, A, deploy_dir):
+    """질환별 출력 {질환: rows}. 자원이 되면 병렬, 아니면(또는 병렬이 실패하면) 순차"""
+    global _POOL_OFF
+    import multiprocessing as mp
+    n = 0 if _POOL_OFF or mp.parent_process() is not None else _usable_workers(len(dises))   # 작업 프로세스 안에서는 다시 나누지 않는다
+    if n:
+        try:
+            with _POOL_LOCK:   # 작업 프로세스는 submit 때 뜬다 → __main__·환경변수를 가리는 동안 다른 요청이 끼어들지 않게
+                futs = _hidden_main_run(lambda: [_pool(n).submit(_par_task, (d, X, A, deploy_dir)) for d in dises])
+            return {d: f.result() for d, f in zip(dises, futs)}   # 결과는 잠금 밖에서 기다린다(동시 요청은 같은 풀을 나눠 씀)
+        except Exception as e:
+            from concurrent.futures.process import BrokenProcessPool
+            if isinstance(e, (BrokenProcessPool, OSError, MemoryError)): _POOL_OFF = True   # 자원 문제는 다시 시도하지 않는다
+            with _POOL_LOCK: _shutdown_pool()
+            print(f'[anyfit_api] 병렬 계산 실패({type(e).__name__}: {e}) → 순차 계산', file=sys.stderr)
+    return {d: _disease_rows(d, X, A, deploy_dir) for d in dises}
+
 def predict_anyfit(records, diseases=None, deploy_dir=None):
     A = pd.DataFrame(records).reset_index(drop=True); X = from_anyfit(A)
     dises = diseases or [d for d in DIS_OUT if os.path.exists(os.path.join(deploy_dir or DEPLOY, d, 'meta.json'))]
@@ -265,28 +391,8 @@ def predict_anyfit(records, diseases=None, deploy_dir=None):
     out = [dict(input=dict(age=nz(a), sex=None if pd.isna(s) else int(s), smoke_former=nz(sf), smoke_current=nz(sc), pack_years=nz(py), alc_cur=nz(ac), alc_days_week=nz(ad), alc_g_week=nz(ag), input_flags=fl))
            for a, s, sf, sc, py, ac, ad, ag, fl in zip(X.age_at_index, X.sex, X.smoke_former, X.smoke_current, X.pack_years, X.alc_cur, X.alc_days_week, X.alc_g_week, X.input_flags)]
     X = X.drop(columns=['input_flags', 'alc_days_week'])   # 갑년·주 알코올 g 는 모델 입력으로 넘긴다(쓰는 모델은 q_module derived 가 있는 질환만 — 폐암 갑년)
-    for dis in dises:
-        M = Model(dis, deploy_dir); ref = Reference(os.path.join(deploy_dir or DEPLOY, dis, 'reference.json'))
-        O = M.predict_df(X, raw=True); base = O['risk_10y'].values; braw = O.get('risk_10y_raw', pd.Series(np.nan, index=O.index)).values   # 백분위·등급·차이·비율·질병나이는 반올림 전 위험으로(4자리 반올림으로 작은 위험이 0 이 되어 1등급으로 뭉치지 않게)
-        Xn = X.copy(); Xn = Xn.where(pd.notna(Xn), np.nan)
-        ctrl, unc = _factors(M, Xn, base)
-        for i in range(len(X)):
-            r = braw[i]; st = ref.stats(r, X.sex.iat[i], X.age_at_index.iat[i]) if pd.notna(r) else ref.stats(np.nan, 0, 0)
-            def fmt(L):
-                res = []
-                for k, d in enumerate(L, 1):
-                    src = next((c for c in list(NUM) + list(HCHK) + list(FMLY) + list(HEP) + ['SMOKING', 'DRINKING'] if c == d['FACTOR_NAME']), None)
-                    if src in NUM: val = None if pd.isna(X.at[i, NUM[src]]) else round(float(X.at[i, NUM[src]]), 2)   # 범위 점검 뒤 값(키·몸무게로 계산한 BMI 포함)
-                    else: val = A.at[i, src] if src in A else None
-                    res.append(dict(RANK=k, FACTOR_NAME=d['FACTOR_NAME'], CHANGE_RISK_RATIO=d['CHANGE_RISK_RATIO'],
-                                    VALUE_CURRENT=None if val is None or pd.isna(val) else (float(val) if isinstance(val, (int, float, np.number)) else val),
-                                    **({'VALUE_RECOMMENDED': d['VALUE_RECOMMENDED']} if 'VALUE_RECOMMENDED' in d else {}),
-                                    **{k: d[k] for k in ('BASIS', 'MODEL_IMPACT') if k in d}))
-                return res
-            out[i][DIS_OUT[dis]] = dict(STATUS=O.status.iat[i], REASON=O.reason.iat[i] or None, MODEL_VERSION=M.version,
-                                        PROBABILITY=None if pd.isna(base[i]) else float(base[i]), PROBABILITY_BY_YEAR=O.risk_by_year.iat[i], **st,
-                                        CONTROLLABLE_FACTOR=fmt(ctrl[i]), UNCONTROLLABLE_FACTOR=fmt(unc[i]),
-                                        IMPUTED_INPUTS=[IMP_CODE.get(k, k) for k in O.imputed.iat[i]], INPUT_IMPACT=O.input_impact.iat[i] or None)
+    for dis, rows in _all_disease_rows(dises, X, A, deploy_dir).items():
+        for i, row in enumerate(rows): out[i][DIS_OUT[dis]] = row
     if os.path.exists(os.path.join(deploy_dir or DEPLOY, 'ha33', 'meta.json')):   # 건강나이·기대여명 — 필드 정의는 삼성 확인 필요
         from health_age_api import HealthAge
         HA = HealthAge(deploy_dir); O = HA.predict_df(X)

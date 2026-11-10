@@ -40,12 +40,13 @@ C·O/E 는 사람 단위 5겹 교차검증 10년 값입니다. ¹대사질환 4�
 |---|---|
 | `deploy/<코드>/` | 모델 묶음: `model.json`(XGBoost), `calibration.json`(보정표), `meta.json`(입력 변수·대치·국가 목표 이동·문진 모듈), `reference.json`(기준 인구 집계: 검진 코호트의 성·5세 연령대별 위험 분포, 30명 이상 칸만. 흡연·음주·가족력은 성·연령대 응답 비율로 섞어 계산. 등급 경계 `grade_cutoffs`), `fill.json`(빈칸 채움표: 성·연령대 중앙값·회귀식, 항목별 채움 방법과 영향도), `MANIFEST.json`(sha256). Cox 모델은 `meta.json` 에 계수가 있다 |
 | `deploy/ha33/` | 건강나이 `health_age.json`·`meta.json` |
-| `api/` | Python 엔진 `deploy_api.py`, 항목정의서 형식 `anyfit_api.py`, 건강나이 `health_age_api.py` |
+| `api/` | Python 엔진 `deploy_api.py`, 항목정의서 형식 `anyfit_api.py`(개선판 — 질환별 병렬 계산), 비교용 순차판 `anyfit_api_seq.py`(병렬 넣기 전 그대로, 결과 같음), 건강나이 `health_age_api.py` |
 | `web/risk_test.html` | 시험 페이지(모델 JSON 전부 포함, 서버·인터넷 없이 열림) |
 | `web/src/` | 시험 페이지 원본: `engine.js`(Python API 를 옮긴 계산 엔진), `template.html` |
 | `web/build_html.py` | `deploy/` 로 `risk_test.html` 다시 만들기 |
-| `tests/` | 가상 입력 116건 `cases.json`(빈칸·입력 오류 사례, 임신/수유·갑상선질환 가칭 필드 4건, 숫자가 아닌 스크래핑 값·검진 결과 없음 4건, B·C형 간염 결과 8건 포함), Python API 결과 `expected_python.json`, 점검 `test_python.py`·`test_engine.js` |
+| `tests/` | 가상 입력 116건 `cases.json`(빈칸·입력 오류 사례, 임신/수유·갑상선질환 가칭 필드 4건, 숫자가 아닌 스크래핑 값·검진 결과 없음 4건, B·C형 간염 결과 8건 포함), Python API 결과 `expected_python.json`, 점검 `test_python.py`·`test_parallel.py`(개선판 = 순차판)·`test_engine.js`, 실행 시간 비교 `bench_parallel.py`, 동시 접속 시험 `bench_concurrency.py` |
 | `examples/` | 입력·출력 예시 1건 |
+| `PERFORMANCE.md` | 실행 시간·동시 접속 시험 결과(32코어: 처리량·응답 시간, 동시 접속 기준, `ANYFIT_WORKERS` 권장값) |
 | `INPUT_API.md` | 분석엔진 입력 API: 정의서 입력 코드별 범위·빈칸 처리, 정의서에 없는 추가 입력(가칭)·추가 출력, 예측 대상 아님 |
 
 ## 실행
@@ -63,11 +64,16 @@ from deploy_api import Model
 Model('htn33', 'deploy').predict({'age': 52, 'sex': 'M', 'sbp': 128, ...})   # 엔진(내부 변수명)
 ```
 
+병렬 계산: `predict_anyfit` 은 질환별 계산을 여러 프로세스로 나눠 돌린다(질환끼리 독립, 시간의 대부분이 조절 가능 인자 계산). 작업 수 = min(질환 수, 쓸 수 있는 CPU(컨테이너 할당량 포함), 지금 놀고 있는 CPU, 가용 메모리 ÷ 400 MB, 16)이고 2 미만이면 순차다. 환경변수 `ANYFIT_WORKERS=n` 으로 상한을 바꾸고 `0` 이면 끈다. 프로세스 시작 실패·메모리 부족·작업 프로세스 종료 등으로 병렬이 실패하면 경고만 남기고 순차로 다시 계산한다(결과는 같다). 작업 프로세스는 수치 라이브러리 스레드를 1개로 쓴다(여러 프로세스가 각자 CPU 수만큼 스레드를 띄우면 서로 다퉈 빨라지지 않는다). 작업 프로세스는 첫 호출 때 한 번 띄우고 계속 쓰므로(작업 수는 첫 호출 때 정해지고 그 뒤 바뀌지 않는다), 한 번만 부르는 CLI 보다 계속 떠 있는 서버에서 효과가 크다. 여러 스레드에서 동시에 불러도 같은 작업 프로세스를 나눠 쓴다. 32코어 서버에서 5건이 순차 7.6초 → 0.7초, 50건 1.2초, 첫 호출 1.7초였다. 개선 전 순차판은 `api/anyfit_api_seq.py` 에 그대로 두었다(같은 함수 `predict_anyfit`, 결과 같음) — 시간 비교·문제 확인용이고 운영에는 `anyfit_api.py` 를 쓴다.
+
 시험 페이지: `web/risk_test.html` 을 브라우저로 엽니다. 입력 양식이나 JSON(1건 또는 배열)을 넣고 "계산"을 누르면 질환별 카드와 항목정의서 형식 JSON 출력이 나옵니다. 모델을 바꾸면 `python web/build_html.py` 로 다시 만듭니다.
 
 점검:
 ```bash
 python tests/test_python.py     # Python API = 기대값
+python tests/test_parallel.py   # 개선판(병렬) = 순차판, 병렬 실패 시 순차로 같은 결과
+python tests/bench_parallel.py  # 실행 시간: 순차판 vs 개선판(1·5·50건), 결과 같음 확인
+python tests/bench_concurrency.py  # 동시 접속 1–64명: 처리량·응답 시간, 결과 같음 확인(PERFORMANCE.md)
 node tests/test_engine.js       # 시험 페이지 엔진 = Python API
 ```
 `test_engine.js` 실패 0(일부 값은 마지막 자리 1 차이 — XGBoost float32 누적 순서).
